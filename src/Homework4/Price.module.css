@@ -1,0 +1,13 @@
+.CurrentDiv button {
+  border-radius: 8px;
+  padding: 5px;
+  outline: none;
+  background-color: brown;
+  color: black;
+  user-select: none;
+}
+
+.CurrentDiv button:hover {
+  background-color: black;
+  color: brown;
+}
