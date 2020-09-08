@@ -11,7 +11,7 @@ export default class Price extends React.Component {
     currency: this.props.currency,
   };
 
-  currentChangeButton = (state) => {
+  currentChangeButton = () => {
     let { price } = this.state;
     let { currency } = this.state;
 
