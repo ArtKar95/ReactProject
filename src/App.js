@@ -1,11 +1,18 @@
 import React from "react";
 import "./App.css";
-import ToDo from "./Components/ToDo";
+import Header from "./Components/Header/Header";
+import Nav from "./Components/Nav/Nav";
+import ToDo from "./Components/ToDo/ToDo";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
-    <div className="App">
-      <ToDo />
+    <div className="app">
+      <Header />
+      <Nav />
+      <div className="appContainer">
+        <ToDo />
+      </div>
     </div>
   );
 }
