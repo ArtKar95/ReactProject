@@ -1,7 +1,7 @@
 import React from "react";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
 
-class AddTask extends React.Component {
+class AddTask extends React.PureComponent {
   state = {
     inputValue: "",
   };
@@ -29,6 +29,7 @@ class AddTask extends React.Component {
   };
 
   render() {
+
     return (
       <InputGroup className="my-3">
         <FormControl
