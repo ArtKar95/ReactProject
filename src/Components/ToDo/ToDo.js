@@ -4,12 +4,14 @@ import idGenerator from "../../Helpers/idGenerator";
 import Task from "./Task/Task";
 import AddTask from "./AddTask";
 import Confirm from "./Confirm";
+import EditTaskModal from "./Modal";
 
 class ToDo extends React.Component {
   state = {
     tasks: [],
     checkedTasks: new Set(),
     showConfirm: false,
+    editedTask: null,
   };
 
   addTask = (inputValue) => {
@@ -63,8 +65,27 @@ class ToDo extends React.Component {
     this.setState({ showConfirm: !this.state.showConfirm });
   };
 
+  handleEdit = (task) => () => {
+    this.setState({ editedTask: task });
+  };
+
+  handleSave = (taskId, editedText) => {
+    const tasks = [...this.state.tasks];
+    const taskIndex = tasks.findIndex((task) => task.id === taskId);
+
+    tasks[taskIndex] = {
+      ...tasks[taskIndex],
+      text: editedText,
+    };
+    this.setState({
+      tasks: tasks,
+      editedTask: null,
+    });
+  };
+  
+
   render() {
-    const { tasks, checkedTasks, showConfirm } = this.state;
+    const { tasks, checkedTasks, showConfirm, editedTask } = this.state;
     const tasksComponents = tasks.map((task) => {
       return (
         <Col key={task.id}>
@@ -73,6 +94,7 @@ class ToDo extends React.Component {
               task={task}
               removeTask={this.removeTask}
               takeCheckedTasks={this.takeCheckedTasks(task.id)}
+              handleEdit={this.handleEdit(task)}
             />
           </span>
         </Col>
@@ -106,8 +128,15 @@ class ToDo extends React.Component {
             count={checkedTasks.size}
             onSubmit={this.removeCheckedTasks}
             onCancel={this.changeShowConfirm}
-          />)
-        }
+          />
+        )}
+        {!!editedTask && (
+          <EditTaskModal
+            editedTask={editedTask}
+            onSave={this.handleSave}
+            onCancel={this.handleEdit(null)}
+          />
+        )}
       </Container>
     );
   }

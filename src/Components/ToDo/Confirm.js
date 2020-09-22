@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import PropTypes from "prop-types";
 
 function Confirm(props) {
   const { count, onSubmit, onCancel } = props;
@@ -30,5 +31,11 @@ function Confirm(props) {
     </Modal>
   );
 }
+
+Confirm.propTypes = {
+  count: PropTypes.number.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+};
 
 export default Confirm;

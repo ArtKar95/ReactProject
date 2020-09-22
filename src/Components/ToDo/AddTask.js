@@ -1,5 +1,6 @@
 import React from "react";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
+import PropTypes from "prop-types";
 
 class AddTask extends React.PureComponent {
   state = {
@@ -29,7 +30,6 @@ class AddTask extends React.PureComponent {
   };
 
   render() {
-
     return (
       <InputGroup className="my-3">
         <FormControl
@@ -49,5 +49,9 @@ class AddTask extends React.PureComponent {
     );
   }
 }
+
+AddTask.propTypes = {
+  addTask: PropTypes.func.isRequired,
+};
 
 export default AddTask;
