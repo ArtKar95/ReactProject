@@ -20,29 +20,29 @@ class Task extends React.PureComponent {
 
   render() {
     const { checked } = this.state;
-    const { task, removeTask, handleEdit } = this.props;
-    const headerName = task.text.slice(0, 4).toUpperCase();
+    const { task, removeTask, handleEdit, disabled } = this.props;
+    const headerName = task.title.slice(0, 4).toUpperCase();
 
     return (
       <Card className={"my-3 mx-3"}>
         <Card.Body className={`${checked ? classes.checkedTask : ""}`}>
           <input type="checkbox" onClick={this.checkboxToggle} />
           <Card.Title
-            onClick={!checked ? removeTask(task.id) : undefined}
-            className={!checked && classes.task}
+            onClick={!disabled ? removeTask(task._id) : undefined}
+            className={!disabled && classes.task}
           >
-            {headerName}
+           {headerName}
           </Card.Title>
-          <Card.Text>{task.text}</Card.Text>
-          <Button variant="info" disabled={!!checked} onClick={handleEdit}>
+          <Card.Text>{task.title}</Card.Text>
+          <Button variant="info" disabled={disabled} onClick={handleEdit}>
             Edit <FontAwesomeIcon icon={faEdit} />
           </Button>
 
           <Button
             className="m-1"
             variant="danger"
-            disabled={!!checked}
-            onClick={removeTask(task.id)}
+            disabled={disabled}
+            onClick={removeTask(task._id)}
           >
             Delete <FontAwesomeIcon icon={faTrash} />
           </Button>

@@ -8,7 +8,7 @@ class EditTaskModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: props.editedTask.text,
+      inputValue: props.editedTask.title,
     };
   }
 
@@ -26,7 +26,7 @@ class EditTaskModal extends React.Component {
   handelSave = () => {
     const { inputValue } = this.state;
     if (inputValue) {
-      const taskId = this.props.editedTask.id;
+      const taskId = this.props.editedTask._id;
       this.props.onSave(taskId, inputValue);
     }
   };
@@ -72,7 +72,7 @@ class EditTaskModal extends React.Component {
 }
 
 EditTaskModal.propTypes = {
-  editedTask: PropTypes.object,
+  editedTask: PropTypes.object.isRequired,
   onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };

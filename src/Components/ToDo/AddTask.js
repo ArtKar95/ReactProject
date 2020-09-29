@@ -1,57 +1,74 @@
 import React from "react";
-import { InputGroup, FormControl, Button } from "react-bootstrap";
+import { FormControl, Button, Modal } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSave, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
 
 class AddTask extends React.PureComponent {
   state = {
-    inputValue: "",
+    title: "",
+    description: "",
+    date: "",
   };
 
   handleInputChange = (event) => {
-    this.setState({ inputValue: event.target.value });
-  };
-
-  addTaskButton = () => {
-    const { inputValue } = this.state;
-    if (!inputValue) {
-      return;
-    }
-    this.props.addTask(inputValue);
-
-    this.setState({
-      inputValue: "",
-    });
+    this.setState({ title: event.target.value });
   };
 
   handleOnKeyDown = (event) => {
     if (event.key === "Enter") {
-      this.addTaskButton();
+      event.preventDefault();
+      this.handelSave();
+    }
+  };
+
+  handelSave = () => {
+    const { title } = this.state;
+    if (title) {
+      this.props.onAdd(title);
     }
   };
 
   render() {
     return (
-      <InputGroup className="my-3">
-        <FormControl
-          placeholder="Write your task"
-          aria-label="Write your task"
-          aria-describedby="basic-addon2"
-          value={this.state.inputValue}
-          onChange={this.handleInputChange}
-          onKeyDown={this.handleOnKeyDown}
-        />
-        <InputGroup.Append>
-          <Button onClick={this.addTaskButton} variant="success">
-            Add Task
+      <Modal
+        size="xs"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        show={true}
+        onHide={this.props.onCancel}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Add your task
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormControl
+            placeholder="Write your task"
+            aria-label="Write your task"
+            aria-describedby="basic-addon2"
+            value={this.state.title}
+            onChange={this.handleInputChange}
+            onKeyDown={this.handleOnKeyDown}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={this.handelSave} variant="success">
+            Add <FontAwesomeIcon icon={faSave} />
           </Button>
-        </InputGroup.Append>
-      </InputGroup>
+          <Button onClick={this.props.onCancel} variant="secondary">
+            Cancel <FontAwesomeIcon icon={faWindowClose} />
+          </Button>
+        </Modal.Footer>
+      </Modal>
     );
   }
 }
 
 AddTask.propTypes = {
-  addTask: PropTypes.func.isRequired,
+  onAdd: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };
 
 export default AddTask;

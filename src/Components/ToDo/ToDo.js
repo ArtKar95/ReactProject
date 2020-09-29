@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import idGenerator from "../../Helpers/idGenerator";
 import Task from "./Task/Task";
 import AddTask from "./AddTask";
 import Confirm from "./Confirm";
@@ -12,24 +11,60 @@ class ToDo extends React.Component {
     checkedTasks: new Set(),
     showConfirm: false,
     editedTask: null,
+    openNewTaskModal: false,
   };
 
-  addTask = (inputValue) => {
-    const { tasks } = this.state;
+  componentDidMount() {
+    fetch("http://localhost:3001/task", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((tasks) => {
+        if (tasks.error) {
+          throw tasks.error;
+        }
 
-    const newTask = {
-      id: idGenerator(),
-      text: inputValue,
+        this.setState({ tasks });
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }
+
+  addTask = (inputValue) => {
+    const data = {
+      title: inputValue,
     };
 
-    this.setState({
-      tasks: [newTask, ...tasks],
-    });
+    fetch("http://localhost:3001/task", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((task) => {
+        if (task.error) {
+          throw task.error;
+        }
+
+        this.setState({
+          tasks: [task, ...this.state.tasks],
+          openNewTaskModal: false,
+        });
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
 
   removeTask = (taskId) => {
     return () => {
-      const newTask = this.state.tasks.filter((item) => item.id !== taskId);
+      const newTask = this.state.tasks.filter((item) => item._id !== taskId);
       this.setState({
         tasks: newTask,
       });
@@ -55,7 +90,7 @@ class ToDo extends React.Component {
     let { tasks } = this.state;
 
     checkedTasks.forEach(
-      (taskId) => (tasks = tasks.filter((task) => task.id !== taskId))
+      (taskId) => (tasks = tasks.filter((task) => task._id !== taskId))
     );
     checkedTasks.clear();
     this.setState({ tasks, checkedTasks, showConfirm: false });
@@ -71,30 +106,42 @@ class ToDo extends React.Component {
 
   handleSave = (taskId, editedText) => {
     const tasks = [...this.state.tasks];
-    const taskIndex = tasks.findIndex((task) => task.id === taskId);
+    const taskIndex = tasks.findIndex((task) => task._id === taskId);
 
     tasks[taskIndex] = {
       ...tasks[taskIndex],
-      text: editedText,
+      title: editedText,
     };
     this.setState({
       tasks: tasks,
       editedTask: null,
     });
   };
-  
+
+  toggleNewTaskModal = () => {
+    this.setState({
+      openNewTaskModal: !this.state.openNewTaskModal,
+    });
+  };
 
   render() {
-    const { tasks, checkedTasks, showConfirm, editedTask } = this.state;
+    const {
+      tasks,
+      checkedTasks,
+      showConfirm,
+      editedTask,
+      openNewTaskModal,
+    } = this.state;
     const tasksComponents = tasks.map((task) => {
       return (
-        <Col key={task.id}>
+        <Col key={task._id}>
           <span>
             <Task
               task={task}
               removeTask={this.removeTask}
-              takeCheckedTasks={this.takeCheckedTasks(task.id)}
+              takeCheckedTasks={this.takeCheckedTasks(task._id)}
               handleEdit={this.handleEdit(task)}
+              disabled={!!checkedTasks.size}
             />
           </span>
         </Col>
@@ -104,8 +151,15 @@ class ToDo extends React.Component {
     return (
       <Container fluid>
         <Row>
-          <Col md={{ span: 6, offset: 3 }}>
-            <AddTask addTask={this.addTask} />
+          <Col md={{ span: 6, offset: 5 }}>
+            <Button
+              className="m-3"
+              variant="primary"
+              disabled={checkedTasks.size}
+              onClick={this.toggleNewTaskModal}
+            >
+              Add your task
+            </Button>
           </Col>
         </Row>
 
@@ -116,14 +170,14 @@ class ToDo extends React.Component {
         <Row className="justify-content-center">
           <Button
             variant="danger"
-            disabled={checkedTasks.size ? false : true}
-            // disabled={!checkedTasks.size}
+            // disabled={checkedTasks.size ? false : true}
+            disabled={!checkedTasks.size}
             onClick={this.changeShowConfirm}
           >
             Delete Selecteds
           </Button>
         </Row>
-        {showConfirm && (
+        {!!showConfirm && (
           <Confirm
             count={checkedTasks.size}
             onSubmit={this.removeCheckedTasks}
@@ -135,6 +189,12 @@ class ToDo extends React.Component {
             editedTask={editedTask}
             onSave={this.handleSave}
             onCancel={this.handleEdit(null)}
+          />
+        )}
+        {!!openNewTaskModal && (
+          <AddTask
+            onAdd={this.addTask}
+            onCancel={this.toggleNewTaskModal}
           />
         )}
       </Container>
