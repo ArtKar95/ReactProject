@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Task from "./Task/Task";
-import AddTask from "./AddTask";
+import AddTask from "./AddTask/AddTask";
 import Confirm from "./Confirm";
 import EditTaskModal from "./Modal";
 
@@ -34,11 +34,7 @@ class ToDo extends React.Component {
       });
   }
 
-  addTask = (inputValue) => {
-    const data = {
-      title: inputValue,
-    };
-
+  addTask = (data) => {
     fetch("http://localhost:3001/task", {
       method: "POST",
       body: JSON.stringify(data),
@@ -64,10 +60,27 @@ class ToDo extends React.Component {
 
   removeTask = (taskId) => {
     return () => {
-      const newTask = this.state.tasks.filter((item) => item._id !== taskId);
-      this.setState({
-        tasks: newTask,
-      });
+      fetch(`http://localhost:3001/task/${taskId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.error) {
+            throw data.error;
+          }
+          const newTask = this.state.tasks.filter(
+            (item) => item._id !== taskId
+          );
+          this.setState({
+            tasks: newTask,
+          });
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
     };
   };
 
@@ -77,23 +90,38 @@ class ToDo extends React.Component {
       ? checkedTasks.delete(taskId)
       : checkedTasks.add(taskId);
 
-    // if (checkedTasks.has(taskId)) {
-    //   checkedTasks.delete(taskId);
-    // } else {
-    //   checkedTasks.add(taskId);
-    // }
     this.setState({ checkedTasks });
   };
 
   removeCheckedTasks = () => {
     const checkedTasks = new Set(this.state.checkedTasks);
-    let { tasks } = this.state;
 
-    checkedTasks.forEach(
-      (taskId) => (tasks = tasks.filter((task) => task._id !== taskId))
-    );
-    checkedTasks.clear();
-    this.setState({ tasks, checkedTasks, showConfirm: false });
+    fetch(`http://localhost:3001/task/`, {
+      method: "DELETE",
+      body: JSON.stringify({
+        tasks: [...checkedTasks],
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          throw data.error;
+        }
+
+        let { tasks } = this.state;
+
+        checkedTasks.forEach(
+          (taskId) => (tasks = tasks.filter((task) => task._id !== taskId))
+        );
+        checkedTasks.clear();
+        this.setState({ tasks, checkedTasks, showConfirm: false });
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
 
   changeShowConfirm = () => {
@@ -151,9 +179,9 @@ class ToDo extends React.Component {
     return (
       <Container fluid>
         <Row>
-          <Col md={{ span: 6, offset: 5 }}>
+          <Col md={{ span: 6, offset: 3 }} className="text-center">
             <Button
-              className="m-3"
+              className="m-3 "
               variant="primary"
               disabled={checkedTasks.size}
               onClick={this.toggleNewTaskModal}
@@ -170,7 +198,6 @@ class ToDo extends React.Component {
         <Row className="justify-content-center">
           <Button
             variant="danger"
-            // disabled={checkedTasks.size ? false : true}
             disabled={!checkedTasks.size}
             onClick={this.changeShowConfirm}
           >
@@ -192,10 +219,7 @@ class ToDo extends React.Component {
           />
         )}
         {!!openNewTaskModal && (
-          <AddTask
-            onAdd={this.addTask}
-            onCancel={this.toggleNewTaskModal}
-          />
+          <AddTask onAdd={this.addTask} onCancel={this.toggleNewTaskModal} />
         )}
       </Container>
     );

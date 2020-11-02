@@ -13,3 +13,8 @@
   background-color: rgb(187, 185, 185);
   min-height: 81vh;
 }
+
+
+.add{
+  position: fixed;
+}
