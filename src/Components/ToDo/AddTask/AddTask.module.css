@@ -1,0 +1,8 @@
+.datePicker > div,
+.datePicker input {
+  width: 100%;
+}
+
+.invalid {
+  outline: 2px outset rgb(218, 91, 91);
+}

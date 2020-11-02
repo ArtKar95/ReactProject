@@ -21,7 +21,6 @@ class Task extends React.PureComponent {
   render() {
     const { checked } = this.state;
     const { task, removeTask, handleEdit, disabled } = this.props;
-    const headerName = task.title.slice(0, 4).toUpperCase();
 
     return (
       <Card className={"my-3 mx-3"}>
@@ -31,9 +30,15 @@ class Task extends React.PureComponent {
             onClick={!disabled ? removeTask(task._id) : undefined}
             className={!disabled && classes.task}
           >
-           {headerName}
+            {task.title}
           </Card.Title>
-          <Card.Text>{task.title}</Card.Text>
+          <Card.Text className={classes.descriptionLine}>
+            Description: {task.description}
+          </Card.Text>
+          <Card.Text className={classes.dateLine}>
+            Date: {task.date ? task.date.slice(0, 10) : "None"}
+          </Card.Text>
+
           <Button variant="info" disabled={disabled} onClick={handleEdit}>
             Edit <FontAwesomeIcon icon={faEdit} />
           </Button>
