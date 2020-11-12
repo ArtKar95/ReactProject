@@ -3,7 +3,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import Task from "./Task/Task";
 import AddTask from "./AddTask/AddTask";
 import Confirm from "./Confirm";
-import EditTaskModal from "./Modal";
+import EditTaskModal from "./EditTaskModal";
 
 class ToDo extends React.Component {
   state = {
@@ -97,7 +97,7 @@ class ToDo extends React.Component {
     const checkedTasks = new Set(this.state.checkedTasks);
 
     fetch(`http://localhost:3001/task/`, {
-      method: "DELETE",
+      method: "PATCH",
       body: JSON.stringify({
         tasks: [...checkedTasks],
       }),
@@ -132,18 +132,30 @@ class ToDo extends React.Component {
     this.setState({ editedTask: task });
   };
 
-  handleSave = (taskId, editedText) => {
-    const tasks = [...this.state.tasks];
-    const taskIndex = tasks.findIndex((task) => task._id === taskId);
-
-    tasks[taskIndex] = {
-      ...tasks[taskIndex],
-      title: editedText,
-    };
-    this.setState({
-      tasks: tasks,
-      editedTask: null,
-    });
+  handleSave = (taskId, data) => {
+    fetch(`http://localhost:3001/task/${taskId}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((editTask) => {
+        if (editTask.error) {
+          throw editTask.error;
+        }
+        const tasks = [...this.state.tasks];
+        const taskIndex = tasks.findIndex((task) => task._id === editTask._id);
+        tasks[taskIndex] = editTask;
+        this.setState({
+          tasks,
+          editedTask: null,
+        });
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
 
   toggleNewTaskModal = () => {
@@ -160,18 +172,17 @@ class ToDo extends React.Component {
       editedTask,
       openNewTaskModal,
     } = this.state;
+
     const tasksComponents = tasks.map((task) => {
       return (
-        <Col key={task._id}>
-          <span>
-            <Task
-              task={task}
-              removeTask={this.removeTask}
-              takeCheckedTasks={this.takeCheckedTasks(task._id)}
-              handleEdit={this.handleEdit(task)}
-              disabled={!!checkedTasks.size}
-            />
-          </span>
+        <Col key={task._id} xl={3} lg={4} md={6} sm={12} xs={12}>
+          <Task
+            task={task}
+            removeTask={this.removeTask}
+            takeCheckedTasks={this.takeCheckedTasks(task._id)}
+            handleEdit={this.handleEdit(task)}
+            disabled={!!checkedTasks.size}
+          />
         </Col>
       );
     });
@@ -191,9 +202,7 @@ class ToDo extends React.Component {
           </Col>
         </Row>
 
-        <Row xl={4} lg={3} md={2} sm={1} xs={1}>
-          {tasksComponents}
-        </Row>
+        <Row>{tasksComponents}</Row>
 
         <Row className="justify-content-center">
           <Button
@@ -214,6 +223,7 @@ class ToDo extends React.Component {
         {!!editedTask && (
           <EditTaskModal
             editedTask={editedTask}
+            data={editedTask}
             onSave={this.handleSave}
             onCancel={this.handleEdit(null)}
           />

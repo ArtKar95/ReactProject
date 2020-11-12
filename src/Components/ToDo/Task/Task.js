@@ -1,6 +1,6 @@
 import React from "react";
 import classes from "./Task.module.css";
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
@@ -39,18 +39,36 @@ class Task extends React.PureComponent {
             Date: {task.date ? task.date.slice(0, 10) : "None"}
           </Card.Text>
 
-          <Button variant="info" disabled={disabled} onClick={handleEdit}>
-            Edit <FontAwesomeIcon icon={faEdit} />
-          </Button>
-
-          <Button
-            className="m-1"
-            variant="danger"
-            disabled={disabled}
-            onClick={removeTask(task._id)}
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip>
+                <strong>Edit</strong>.
+              </Tooltip>
+            }
           >
-            Delete <FontAwesomeIcon icon={faTrash} />
-          </Button>
+            <Button variant="info" disabled={disabled} onClick={handleEdit}>
+              <FontAwesomeIcon icon={faEdit} />
+            </Button>
+          </OverlayTrigger>
+
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip>
+                <strong>Delete</strong>.
+              </Tooltip>
+            }
+          >
+            <Button
+              className="m-2"
+              variant="danger"
+              disabled={disabled}
+              onClick={removeTask(task._id)}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </Button>
+          </OverlayTrigger>
         </Card.Body>
       </Card>
     );
