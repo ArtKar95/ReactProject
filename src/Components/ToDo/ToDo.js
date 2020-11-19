@@ -201,7 +201,6 @@ class ToDo extends React.Component {
             </Button>
           </Col>
         </Row>
-
         <Row>{tasksComponents}</Row>
 
         <Row className="justify-content-center">
@@ -222,7 +221,6 @@ class ToDo extends React.Component {
         )}
         {!!editedTask && (
           <EditTaskModal
-            editedTask={editedTask}
             data={editedTask}
             onSave={this.handleSave}
             onCancel={this.handleEdit(null)}

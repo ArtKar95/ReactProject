@@ -1,0 +1,8 @@
+.notFound {
+  width: 100%;
+  min-height: 81vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url(./../../assets/images/notFound.gif);
+}

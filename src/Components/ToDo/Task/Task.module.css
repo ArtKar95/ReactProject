@@ -1,18 +1,12 @@
-.task:hover {
-  text-decoration: line-through;
-  color: #c54036;
-}
-
-
 .checkedTask {
   background-color: rgb(255, 231, 231);
   border: 3px outset rgb(218, 91, 91);
 }
 
-.dateLine{
+.dateLine {
   color: #c54036;
 }
 
-.descriptionLine{
-  color: #4e1d16;
+.descriptionLine {
+  color: #959396;
 }

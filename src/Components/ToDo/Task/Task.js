@@ -4,6 +4,7 @@ import { Button, Card, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 class Task extends React.PureComponent {
   state = {
@@ -21,20 +22,36 @@ class Task extends React.PureComponent {
   render() {
     const { checked } = this.state;
     const { task, removeTask, handleEdit, disabled } = this.props;
-
     return (
       <Card className={"my-3 mx-3"}>
         <Card.Body className={`${checked ? classes.checkedTask : ""}`}>
           <input type="checkbox" onClick={this.checkboxToggle} />
-          <Card.Title
-            onClick={!disabled ? removeTask(task._id) : undefined}
-            className={!disabled && classes.task}
-          >
-            {task.title}
-          </Card.Title>
+
+          {disabled ? (
+            <Card.Title>{task.title.slice(0, 12)}</Card.Title>
+          ) : (
+            <OverlayTrigger
+              placement="top-start"
+              overlay={
+                <Tooltip>
+                  <strong>Go Task</strong>.
+                </Tooltip>
+              }
+            >
+              {disabled ? (
+                <Card.Title>{task.title.slice(0, 12)}</Card.Title>
+              ) : (
+                <Link to={`/task/${task._id}`}>
+                  <Card.Title>{task.title.slice(0, 12)}</Card.Title>
+                </Link>
+              )}
+            </OverlayTrigger>
+          )}
+
           <Card.Text className={classes.descriptionLine}>
-            Description: {task.description}
+            Description: {task.description.slice(0, 7) + "..."}
           </Card.Text>
+
           <Card.Text className={classes.dateLine}>
             Date: {task.date ? task.date.slice(0, 10) : "None"}
           </Card.Text>

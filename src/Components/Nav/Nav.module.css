@@ -1,8 +1,24 @@
 .nav {
   grid-area: n;
   background-color: rgb(75, 68, 68);
-  padding: 20px;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 800;
-  color: rgb(225, 217, 233);
+  user-select: none;
+
+}
+
+.nav > ul {
+  list-style: none;
+  margin-top: 40px;
+  margin-left: -18px;
+}
+
+.nav > li {
+  margin-top: 25px;
+}
+
+.activeLink {
+  color: rgb(230, 222, 238);
+  text-shadow: 2px 2px 9px rgb(230, 222, 238);
+  font-size: 22px;
 }
