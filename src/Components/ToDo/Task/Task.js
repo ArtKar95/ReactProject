@@ -81,7 +81,7 @@ class Task extends React.PureComponent {
               className="m-2"
               variant="danger"
               disabled={disabled}
-              onClick={removeTask(task._id)}
+              onClick={() => { removeTask(task._id) }}
             >
               <FontAwesomeIcon icon={faTrash} />
             </Button>
