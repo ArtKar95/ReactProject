@@ -4,37 +4,43 @@ import Task from "./Task/Task";
 import AddTask from "./AddTask/AddTask";
 import Confirm from "./Confirm";
 import EditTaskModal from "./EditTaskModal";
-import {
-  getTasksAC,
-  addTaskAC,
-  removeTaskAC,
-  handleSaveAC,
-  removeCheckedTasksAC,
-  takeCheckedTasksAC,
-} from "../../store/actionCreator";
+import { getTasks, editTask, removeTasks } from "../../redux/actionCreator";
 import { connect } from "react-redux";
-import Loader from "../Loader/Loader";
 
 class ToDo extends React.Component {
   state = {
     showConfirm: false,
     editedTask: null,
     openNewTaskModal: false,
+    checkedTasks: new Set(),
   };
 
   componentDidMount() {
-    this.props.getTasksAC();
+    this.props.getTasks();
   }
 
-  addTask = (data) => {
-    this.props.addTaskAC(data);
-    this.setState({ openNewTaskModal: false });
+  componentDidUpdate(prevProps) {
+    if (!prevProps.addTaskSuccess && this.props.addTaskSuccess)
+      this.setState({ openNewTaskModal: false });
+
+    if (!prevProps.removeTasksSuccess && this.props.removeTasksSuccess)
+      this.setState({ showConfirm: false, checkedTasks: new Set() });
+    if (!prevProps.editTaskSuccess && this.props.editTaskSuccess)
+      this.setState({ editedTask: null });
+  }
+
+  takeCheckedTasks = (taskId) => () => {
+    const checkedTasks = new Set(this.state.checkedTasks);
+    checkedTasks.has(taskId)
+      ? checkedTasks.delete(taskId)
+      : checkedTasks.add(taskId);
+
+    this.setState({ checkedTasks });
   };
 
   removeCheckedTasks = () => {
-    this.props.removeCheckedTasksAC(this.props.checkedTasks);
-
-    this.setState({ showConfirm: false });
+    const chackedTasks = [...this.state.checkedTasks];
+    this.props.removeTasks({ tasks: chackedTasks });
   };
 
   changeShowConfirm = () => {
@@ -45,11 +51,6 @@ class ToDo extends React.Component {
     this.setState({ editedTask: task });
   };
 
-  handleSave = (taskId, data) => {
-    this.props.handleSaveAC(taskId, data);
-    this.setState({ editedTask: null });
-  };
-
   toggleNewTaskModal = () => {
     this.setState({
       openNewTaskModal: !this.state.openNewTaskModal,
@@ -57,17 +58,19 @@ class ToDo extends React.Component {
   };
 
   render() {
-    const { showConfirm, editedTask, openNewTaskModal } = this.state;
-    const { tasks, loading, checkedTasks } = this.props;
+    const {
+      showConfirm,
+      editedTask,
+      openNewTaskModal,
+      checkedTasks,
+    } = this.state;
+    const { tasks } = this.props;
     const tasksComponents = tasks.map((task) => {
       return (
         <Col key={task._id} xl={3} lg={4} md={6} sm={12} xs={12}>
           <Task
             task={task}
-            removeTask={this.props.removeTaskAC}
-            takeCheckedTasks={() => {
-              this.props.takeCheckedTasksAC(task._id);
-            }}
+            takeCheckedTasks={this.takeCheckedTasks(task._id)}
             handleEdit={this.handleEdit(task)}
             disabled={checkedTasks.size}
           />
@@ -88,7 +91,7 @@ class ToDo extends React.Component {
             </Button>
           </Col>
         </Row>
-        <>{!!loading ? <Loader /> : <Row> {tasksComponents}</Row>}</>
+        <Row> {tasksComponents}</Row>
         <Row className="justify-content-center">
           <Button
             variant="danger"
@@ -110,13 +113,10 @@ class ToDo extends React.Component {
         {!!editedTask && (
           <EditTaskModal
             data={editedTask}
-            onSave={this.handleSave}
             onCancel={this.handleEdit(null)}
           />
         )}
-        {!!openNewTaskModal && (
-          <AddTask onAdd={this.addTask} onCancel={this.toggleNewTaskModal} />
-        )}
+        {!!openNewTaskModal && <AddTask onCancel={this.toggleNewTaskModal} />}
       </Container>
     );
   }
@@ -125,18 +125,16 @@ class ToDo extends React.Component {
 const mapStateToProps = (state) => {
   return {
     tasks: state.tasks,
-    loading: state.loading,
-    checkedTasks: state.checkedTasks,
+    addTaskSuccess: state.addTaskSuccess,
+    removeTasksSuccess: state.removeTasksSuccess,
+    editTaskSuccess: state.editTaskSuccess,
   };
 };
 
 const mapDispatchToProps = {
-  getTasksAC,
-  addTaskAC,
-  removeTaskAC,
-  handleSaveAC,
-  takeCheckedTasksAC,
-  removeCheckedTasksAC,
+  getTasks,
+  editTask,
+  removeTasks,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDo);

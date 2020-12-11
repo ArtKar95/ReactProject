@@ -1,29 +1,67 @@
 import React from "react";
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
+import { Switch, Route } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
+import { connect } from "react-redux";
 import Header from "./Components/Header/Header";
 import Nav from "./Components/Nav/Nav";
 import ToDo from "./Components/ToDo/ToDo";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Switch, Route } from "react-router";
 import NotFoundPage from "./Components/NotFound/NotFound";
 import TaskPage from "./Components/TaskPage/TaskPage";
+import Loader from "./Components/Loader/Loader";
 
-function App() {
-  return (
-    <div className="app">
-      <Header />
-      <Nav />
-      <div className="appContainer">
-        <Switch>
-          <Route path="/" exact component={ToDo} />
-          <Route path="/task/:id" exact component={TaskPage} />
-          <Route path="*" exact component={NotFoundPage} />
-          {/* <Route path="/not-found" exact component={NotFoundPage} />
+class App extends React.PureComponent {
+  componentDidUpdate() {
+    const { successMessage, error } = this.props;
+    if (successMessage) {
+      toast.success(successMessage);
+    }
+    if (error) {
+      toast.error(error);
+    }
+  }
+
+  render() {
+    return (
+      <div className="app">
+        <Header />
+        <Nav />
+        <div className="appContainer">
+          <Switch>
+            <Route path="/" exact component={ToDo} />
+            <Route path="/task/:id" exact component={TaskPage} />
+            <Route path="*" exact component={NotFoundPage} />
+            {/* <Route path="/not-found" exact component={NotFoundPage} />
           <Redirect to="/not-found" /> */}
-        </Switch>
+          </Switch>
+        </div>
+
+        <ToastContainer
+          position="bottom-left"
+          autoClose={2500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+
+        {this.props.loading && <Loader/>}
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    error: state.error,
+    successMessage: state.successMessage,
+    loading: state.loading,
+  };
+};
+
+export default connect(mapStateToProps, null)(App);

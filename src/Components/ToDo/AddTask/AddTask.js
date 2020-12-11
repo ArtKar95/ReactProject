@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import classes from "./AddTask.module.css";
 import { TitleAlert } from "../../Alerts/Alerts";
-import { showAlertAC } from "../../../store/actionCreator";
+import { showAlert, addTask } from "../../../redux/actionCreator";
 import { connect } from "react-redux";
 
 class AddTask extends React.PureComponent {
@@ -45,7 +45,7 @@ class AddTask extends React.PureComponent {
 
     if (!title) {
       this.setState({ valid: false, validationType: "requiredError" });
-      return this.props.showAlertAC("The title cannot be empty");
+      return this.props.showAlert("The title cannot be empty");
     }
 
     if (title.length > 30) {
@@ -55,14 +55,12 @@ class AddTask extends React.PureComponent {
       );
     }
 
-    
-
     const data = {
       title,
       description,
       date: date.toISOString().slice(0, 10),
     };
-    this.props.onAdd(data);
+    this.props.addTask(data);
   };
 
   render() {
@@ -144,11 +142,11 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  showAlertAC,
+  showAlert,
+  addTask,
 };
 
 AddTask.propTypes = {
-  onAdd: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
 
