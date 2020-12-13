@@ -13,6 +13,8 @@
 //   const json = await response.json();
 //   return json;
 // };
+
+
 function request(url, method='GET', body){
   const config = {
       method: method,
@@ -20,7 +22,6 @@ function request(url, method='GET', body){
           "Content-Type": 'application/json',
       }
   };
-
   if(body){
       config.body = JSON.stringify(body);
   }
@@ -37,4 +38,4 @@ function request(url, method='GET', body){
 }
 
 export default request;
-// export default request;
+
