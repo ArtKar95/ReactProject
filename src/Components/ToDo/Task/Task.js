@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { removeTask } from "../../../redux/actionCreator";
+import {connect} from "react-redux";
 
 class Task extends React.PureComponent {
   state = {
@@ -81,7 +83,9 @@ class Task extends React.PureComponent {
               className="m-2"
               variant="danger"
               disabled={disabled}
-              onClick={removeTask(task._id)}
+              onClick={() => {
+                removeTask(task._id);
+              }}
             >
               <FontAwesomeIcon icon={faTrash} />
             </Button>
@@ -92,11 +96,14 @@ class Task extends React.PureComponent {
   }
 }
 
+const mapDispatchToProps = {
+  removeTask,
+};
+
 Task.propTypes = {
   task: PropTypes.object.isRequired,
-  removeTask: PropTypes.func.isRequired,
   takeCheckedTasks: PropTypes.func.isRequired,
   handleEdit: PropTypes.func.isRequired,
 };
 
-export default Task;
+export default connect(null, mapDispatchToProps)(Task);

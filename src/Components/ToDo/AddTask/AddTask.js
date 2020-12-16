@@ -6,6 +6,9 @@ import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import classes from "./AddTask.module.css";
+import { TitleAlert } from "../../Alerts/Alerts";
+import { showAlert, addTask } from "../../../redux/actionCreator";
+import { connect } from "react-redux";
 
 class AddTask extends React.PureComponent {
   state = {
@@ -42,12 +45,14 @@ class AddTask extends React.PureComponent {
 
     if (!title) {
       this.setState({ valid: false, validationType: "requiredError" });
-      return;
+      return this.props.showAlert("The title cannot be empty");
     }
 
     if (title.length > 30) {
       this.setState({ valid: false, validationType: "lengthError" });
-      return;
+      return this.props.showAlertAC(
+        "The title cannot be more than 30 characters "
+      );
     }
 
     const data = {
@@ -55,7 +60,7 @@ class AddTask extends React.PureComponent {
       description,
       date: date.toISOString().slice(0, 10),
     };
-    this.props.onAdd(data);
+    this.props.addTask(data);
   };
 
   render() {
@@ -79,20 +84,24 @@ class AddTask extends React.PureComponent {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Group controlId="exampleForm.ControlInput1">
-            <Form.Label className={"text-danger"}>{errorMessage}</Form.Label>
-            <FormControl
-              className={!valid ? classes.invalid : null}
-              placeholder="Title"
-              aria-label="Title"
-              aria-describedby="basic-addon2"
-              value={title}
-              onChange={(event) =>
-                this.handleInputChange("title", event.target.value)
-              }
-              onKeyDown={this.handleOnKeyDown}
-            />
-          </Form.Group>
+          {this.props.alert ? (
+            <TitleAlert text={this.props.alert} />
+          ) : (
+            <Form.Group controlId="exampleForm.ControlInput1">
+              <Form.Label className={"text-danger"}>{errorMessage}</Form.Label>
+              <FormControl
+                className={!valid ? classes.invalid : null}
+                placeholder="Title"
+                aria-label="Title"
+                aria-describedby="basic-addon2"
+                value={title}
+                onChange={(event) =>
+                  this.handleInputChange("title", event.target.value)
+                }
+                onKeyDown={this.handleOnKeyDown}
+              />
+            </Form.Group>
+          )}
 
           <Form.Control
             as="textarea"
@@ -126,9 +135,19 @@ class AddTask extends React.PureComponent {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    alert: state.alert,
+  };
+};
+
+const mapDispatchToProps = {
+  showAlert,
+  addTask,
+};
+
 AddTask.propTypes = {
-  onAdd: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
 
-export default AddTask;
+export default connect(mapStateToProps, mapDispatchToProps)(AddTask);
