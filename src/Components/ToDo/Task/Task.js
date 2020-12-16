@@ -6,7 +6,8 @@ import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { removeTask } from "../../../redux/actionCreator";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
+import { formatDate, shortStr } from "../../../Helpers/utils";
 
 class Task extends React.PureComponent {
   state = {
@@ -30,7 +31,7 @@ class Task extends React.PureComponent {
           <input type="checkbox" onClick={this.checkboxToggle} />
 
           {disabled ? (
-            <Card.Title>{task.title.slice(0, 12)}</Card.Title>
+            <Card.Title>{shortStr(task.title, 10)}</Card.Title>
           ) : (
             <OverlayTrigger
               placement="top-start"
@@ -40,22 +41,18 @@ class Task extends React.PureComponent {
                 </Tooltip>
               }
             >
-              {disabled ? (
-                <Card.Title>{task.title.slice(0, 12)}</Card.Title>
-              ) : (
-                <Link to={`/task/${task._id}`}>
-                  <Card.Title>{task.title.slice(0, 12)}</Card.Title>
-                </Link>
-              )}
+              <Link to={`/task/${task._id}`}>
+                <Card.Title>{shortStr(task.title, 10)}</Card.Title>
+              </Link>
             </OverlayTrigger>
           )}
 
           <Card.Text className={classes.descriptionLine}>
-            Description: {task.description.slice(0, 7) + "..."}
+            Description: {shortStr(task.description, 6)}
           </Card.Text>
 
           <Card.Text className={classes.dateLine}>
-            Date: {task.date ? task.date.slice(0, 10) : "None"}
+            Date: {task.date ? formatDate(task.date) : "None"}
           </Card.Text>
 
           <OverlayTrigger

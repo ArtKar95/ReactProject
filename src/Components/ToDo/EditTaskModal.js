@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createRef } from "react";
 import { FormControl, Button, Modal, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faWindowClose } from "@fortawesome/free-solid-svg-icons";
@@ -18,6 +18,12 @@ class EditTaskModal extends React.PureComponent {
       valid: true,
       validationType: null,
     };
+
+    this.inputRef = createRef();
+  }
+
+  componentDidMount() {
+    this.inputRef.current.focus();
   }
 
   validationErrors = {
@@ -59,7 +65,8 @@ class EditTaskModal extends React.PureComponent {
       description,
       date: date.toISOString().slice(0, 10),
     };
-    this.props.editTask(_id, data);
+    const { editTask, from } = this.props;
+    editTask(_id, data, from);
   };
 
   render() {
@@ -95,6 +102,7 @@ class EditTaskModal extends React.PureComponent {
                 this.handleInputChange("title", event.target.value)
               }
               onKeyDown={this.handleOnKeyDown}
+              ref={this.inputRef}
             />
           </Form.Group>
 
@@ -134,6 +142,7 @@ class EditTaskModal extends React.PureComponent {
 EditTaskModal.propTypes = {
   data: PropTypes.object.isRequired,
   onCancel: PropTypes.func.isRequired,
+  from: PropTypes.oneOf(["task", "tasks"]),
 };
 
 const mapDispatchToProps = {

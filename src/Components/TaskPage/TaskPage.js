@@ -2,85 +2,45 @@ import React from "react";
 import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
-import Loader from "../Loader/Loader";
 import classes from "./TaskPage.module.css";
 import EditTaskModal from "../ToDo/EditTaskModal";
+import { connect } from "react-redux";
+import { getTask, removeTask } from "../../redux/actionCreator";
+import NotFoundPage from "../NotFound/NotFound";
+import { formatDate } from "../../Helpers/utils";
 
 class TaskPage extends React.PureComponent {
   state = {
-    task: null,
     isEdit: false,
   };
 
   componentDidMount() {
     const taskId = this.props.match.params.id;
+    this.props.getTask(taskId);
+  }
 
-    fetch(`http://localhost:3001/task/${taskId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((task) => {
-        if (task.error) {
-          throw task.error;
-        }
-
-        this.setState({ task });
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+  componentDidUpdate(prevProps) {
+    if (!prevProps.removeTaskSuccess && this.props.removeTaskSuccess) {
+      this.props.history.push("/");
+    }
+    if (!prevProps.editTaskSuccess && this.props.editTaskSuccess) {
+      this.toggleEdit();
+    }
   }
 
   removeTask = () => {
-    const taskId = this.state.task._id;
-
-    fetch(`http://localhost:3001/task/${taskId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.error) {
-          throw data.error;
-        }
-        this.props.history.push("/");
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+    const taskId = this.props.task._id;
+    this.props.removeTask(taskId, "task");
   };
 
   toggleEdit = () => {
     this.setState({ isEdit: !this.state.isEdit });
   };
 
-  editTask = (taskId, data) => {
-    fetch(`http://localhost:3001/task/${taskId}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((editTask) => {
-        if (editTask.error) {
-          throw editTask.error;
-        }
-        this.setState({ task: editTask, isEdit: false });
-      })
-      .catch((err) => {
-        console.log("Error", err);
-      });
-  };
-
   render() {
-    const { task, isEdit } = this.state;
+    const { isEdit } = this.state;
+    const { task } = this.props;
+
     return (
       <>
         {task ? (
@@ -88,11 +48,11 @@ class TaskPage extends React.PureComponent {
             <h1>&#9734;&#9734;&#9734;{task.title}</h1>
             <div className={classes.changeInfo}>
               <div className={classes.date}>
-                <span> CREATED: {task.created_at.slice(0, 10)}</span>
+                <span> CREATED: {formatDate(task.created_at)}</span>
                 <br />
-                <span> LAST UPDATE: {task.updated_at.slice(0, 10)}</span>
+                <span> LAST UPDATE: {formatDate(task.updated_at)}</span>
                 <br />
-                <span> DEADLINE: {task.date.slice(0, 10)}</span>
+                <span> DEADLINE: {formatDate(task.date)}</span>
               </div>
               <div className={classes.taskButtons}>
                 <OverlayTrigger
@@ -135,17 +95,29 @@ class TaskPage extends React.PureComponent {
             {!!isEdit && (
               <EditTaskModal
                 data={task}
-                onSave={this.editTask}
                 onCancel={this.toggleEdit}
+                from="task"
               />
             )}
           </div>
         ) : (
-          <Loader />
+          <NotFoundPage />
         )}
       </>
     );
   }
 }
 
-export default TaskPage;
+const mapStateToProps = (state) => {
+  return {
+    task: state.task,
+    removeTaskSuccess: state.removeTaskSuccess,
+    editTaskSuccess: state.editTaskSuccess,
+  };
+};
+
+const mapDispatchToProps = {
+  getTask,
+  removeTask,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(TaskPage);
