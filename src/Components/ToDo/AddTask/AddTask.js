@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createRef } from "react";
 import { FormControl, Button, Modal, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faWindowClose } from "@fortawesome/free-solid-svg-icons";
@@ -18,6 +18,12 @@ class AddTask extends React.PureComponent {
     valid: true,
     validationType: null,
   };
+
+  inputRef = createRef();
+
+  componentDidMount() {
+    this.inputRef.current.focus();
+  }
 
   validationErrors = {
     requiredError: "The field is required!",
@@ -99,6 +105,7 @@ class AddTask extends React.PureComponent {
                   this.handleInputChange("title", event.target.value)
                 }
                 onKeyDown={this.handleOnKeyDown}
+                ref={this.inputRef}
               />
             </Form.Group>
           )}

@@ -5,6 +5,8 @@ export const HIDE_ALERT = "TODO/HIDE_ALERT";
 
 export const GET_TASKS_SUCCESS = "TODo/GET_TASKS_SUCCESS";
 
+export const GET_TASK_SUCCESS = "TODo/GET_TASK_SUCCESS";
+
 export const ADD_TASK_SUCCESS = "TODo/ADD_TASK_SUCCESS";
 export const ADDING_TASK = "TODo/ADDING_TASK";
 

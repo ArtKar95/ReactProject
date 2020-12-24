@@ -2,12 +2,14 @@ import * as actionTypes from "./actionTypes";
 
 const initState = {
   tasks: [],
+  task: null,
   loading: false,
   error: null,
   alert: null,
   successMessage: null,
   addTaskSuccess: false,
   removeTasksSuccess: false,
+  removeTaskSuccess: false,
   editTaskSuccess: false,
 };
 
@@ -53,6 +55,14 @@ const toDoReduser = (state = initState, action) => {
       };
     }
 
+    case actionTypes.GET_TASK_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        task: action.payload,
+      };
+    }
+
     case actionTypes.ADD_TASK_SUCCESS: {
       return {
         ...state,
@@ -72,31 +82,60 @@ const toDoReduser = (state = initState, action) => {
     }
 
     case actionTypes.EDIT_TASK_SUCCESS: {
-      const tasks = state.tasks;
-      const taskIndex = tasks.findIndex(
-        (task) => task._id === action.payload._id
-      );
-      tasks[taskIndex] = action.payload;
-      return {
+      const newState = {
         ...state,
         loading: false,
-        tasks,
         editTaskSuccess: true,
         successMessage: "Task edited successfully",
       };
+
+      if (action.from === "task") {
+        return {
+          ...newState,
+          task: action.payload,
+        };
+      } else {
+        const tasks = state.tasks;
+        const taskIndex = tasks.findIndex(
+          (task) => task._id === action.payload._id
+        );
+        tasks[taskIndex] = action.payload;
+        return {
+          ...newState,
+          tasks,
+        };
+      }
     }
 
-    case actionTypes.REMOVING_TASK:
-      return  loadingState;
+    case actionTypes.REMOVING_TASK: {
+      return {
+        ...loadingState,
+        removeTaskSuccess: false,
+      };
+    }
 
     case actionTypes.REMOVE_TASK_SUCCESS: {
-      const newTask = state.tasks.filter((item) => item._id !== action.payload);
-      return {
+      const newState = {
         ...state,
         loading: false,
-        tasks: newTask,
         successMessage: "Task removed successfully",
       };
+      if (action.from === "task") {
+        return {
+          ...newState,
+          task: null,
+          removeTaskSuccess: true,
+        };
+      } else {
+        const newTask = state.tasks.filter(
+          (item) => item._id !== action.payload
+        );
+
+        return {
+          ...newState,
+          tasks: newTask,
+        };
+      }
     }
 
     case actionTypes.REMOVING_TASKS:
