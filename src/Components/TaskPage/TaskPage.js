@@ -1,11 +1,20 @@
 import React from "react";
 import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faEdit,
+  faHistory,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 import classes from "./TaskPage.module.css";
 import EditTaskModal from "../ToDo/EditTaskModal";
 import { connect } from "react-redux";
-import { getTask, removeTask } from "../../redux/actionCreator";
+import {
+  getTask,
+  removeTask,
+  changeTaskStatus,
+} from "../../redux/actionCreator";
 import NotFoundPage from "../NotFound/NotFound";
 import { formatDate } from "../../Helpers/utils";
 
@@ -39,7 +48,7 @@ class TaskPage extends React.PureComponent {
 
   render() {
     const { isEdit } = this.state;
-    const { task } = this.props;
+    const { task, changeTaskStatus } = this.props;
 
     return (
       <>
@@ -55,6 +64,50 @@ class TaskPage extends React.PureComponent {
                 <span> DEADLINE: {formatDate(task.date)}</span>
               </div>
               <div className={classes.taskButtons}>
+                {task.status === "active" ? (
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip>
+                        <strong>Mark as done</strong>.
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      variant="success"
+                      onClick={() => {
+                        changeTaskStatus(task._id, { status: "done" }, "task");
+                      }}
+                      className="m-2"
+                    >
+                      <FontAwesomeIcon icon={faCheck} />
+                    </Button>
+                  </OverlayTrigger>
+                ) : (
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip>
+                        <strong>Mark as active</strong>.
+                      </Tooltip>
+                    }
+                  >
+                    <Button
+                      variant="warning"
+                      onClick={() => {
+                        changeTaskStatus(
+                          task._id,
+                          { status: "active" },
+                          "task"
+                        );
+                      }}
+                      className="m-2"
+                    >
+                      <FontAwesomeIcon icon={faHistory} />
+                    </Button>
+                  </OverlayTrigger>
+                )}
+
                 <OverlayTrigger
                   placement="left"
                   overlay={
@@ -119,5 +172,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   getTask,
   removeTask,
+  changeTaskStatus,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(TaskPage);

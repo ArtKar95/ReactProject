@@ -6,6 +6,7 @@ import Confirm from "./Confirm";
 import EditTaskModal from "./EditTaskModal";
 import { getTasks, editTask, removeTasks } from "../../redux/actionCreator";
 import { connect } from "react-redux";
+import Search from "../search/Search";
 
 class ToDo extends React.Component {
   state = {
@@ -25,6 +26,7 @@ class ToDo extends React.Component {
 
     if (!prevProps.removeTasksSuccess && this.props.removeTasksSuccess)
       this.setState({ showConfirm: false, checkedTasks: new Set() });
+
     if (!prevProps.editTaskSuccess && this.props.editTaskSuccess)
       this.setState({ editedTask: null });
   }
@@ -79,6 +81,7 @@ class ToDo extends React.Component {
     });
     return (
       <Container fluid>
+        <Search />
         <Row>
           <Col md={{ span: 6, offset: 3 }} className="text-center">
             <Button
@@ -111,10 +114,7 @@ class ToDo extends React.Component {
           />
         )}
         {!!editedTask && (
-          <EditTaskModal
-            data={editedTask}
-            onCancel={this.handleEdit(null)}
-          />
+          <EditTaskModal data={editedTask} onCancel={this.handleEdit(null)} />
         )}
         {!!openNewTaskModal && <AddTask onCancel={this.toggleNewTaskModal} />}
       </Container>

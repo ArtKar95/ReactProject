@@ -23,11 +23,22 @@ export const hideAlert = () => {
   };
 };
 
-export const getTasks = () => {
+export const getTasks = (params = {}) => {
+  let url = `${apiUrl}/task`;
+
+  let query = "?";
+  for (let key in params) {
+    query += `${key}=${params[key]}&`;
+  }
+
+  if (query !== "?") {
+    url += query;
+  }
+
   return async (dispatch) => {
     try {
       dispatch(showLoading());
-      const response = await request(`${apiUrl}/task`);
+      const response = await request(url);
       dispatch({ type: actionTypes.GET_TASKS_SUCCESS, payload: response });
     } catch (err) {
       dispatch({ type: actionTypes.FAILURE, payload: err.message });
@@ -103,6 +114,23 @@ export const removeTasks = (data) => {
       dispatch({
         type: actionTypes.REMOVE_TASKS_SUCCESS,
         payload: data.tasks,
+      });
+    } catch (err) {
+      dispatch({ type: actionTypes.FAILURE, payload: err.message });
+    }
+  };
+};
+
+export const changeTaskStatus = (taskId, data, from = "tasks") => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: actionTypes.CHANGING_TASK_STATUS });
+      const response = await request(`${apiUrl}/task/${taskId}`, "PUT", data);
+      dispatch({
+        type: actionTypes.CHANGE_TASK_STATUS_SUCCESS,
+        payload: response,
+        from,
+        status: data.status,
       });
     } catch (err) {
       dispatch({ type: actionTypes.FAILURE, payload: err.message });

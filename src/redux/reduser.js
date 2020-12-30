@@ -107,6 +107,38 @@ const toDoReduser = (state = initState, action) => {
       }
     }
 
+    case actionTypes.CHANGING_TASK_STATUS: {
+      return loadingState;
+    }
+
+    case actionTypes.CHANGE_TASK_STATUS_SUCCESS: {
+      const newState = {
+        ...state,
+        loading: false,
+        successMessage:
+          action.status === "done"
+            ? "The task is completed 🎉"
+            : "The task is active now",
+      };
+
+      if (action.from === "task") {
+        return {
+          ...newState,
+          task: action.payload,
+        };
+      } else {
+        const tasks = state.tasks;
+        const taskIndex = tasks.findIndex(
+          (task) => task._id === action.payload._id
+        );
+        tasks[taskIndex] = action.payload;
+        return {
+          ...newState,
+          tasks,
+        };
+      }
+    }
+
     case actionTypes.REMOVING_TASK: {
       return {
         ...loadingState,
