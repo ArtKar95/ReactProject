@@ -60,6 +60,7 @@ class EditTaskModal extends React.PureComponent {
       return;
     }
 
+    date = date || new Date();
     const data = {
       title,
       description,

@@ -2,10 +2,15 @@ import React from "react";
 import classes from "./Task.module.css";
 import { Button, Card, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faEdit,
+  faCheck,
+  faHistory,
+} from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { removeTask } from "../../../redux/actionCreator";
+import { removeTask, changeTaskStatus } from "../../../redux/actionCreator";
 import { connect } from "react-redux";
 import { formatDate, shortStr } from "../../../Helpers/utils";
 
@@ -24,10 +29,27 @@ class Task extends React.PureComponent {
 
   render() {
     const { checked } = this.state;
-    const { task, removeTask, handleEdit, disabled } = this.props;
+    const {
+      task,
+      removeTask,
+      handleEdit,
+      disabled,
+      changeTaskStatus,
+    } = this.props;
+
+    const cardClasses = [classes.cardBorder];
+    if (checked) {
+      cardClasses.push(classes.checkedTask);
+    }
+    if (task.status === "active") {
+      cardClasses.push(classes.activeTask);
+    } else {
+      cardClasses.push(classes.doneTask);
+    }
+
     return (
       <Card className={"my-3 mx-3"}>
-        <Card.Body className={`${checked ? classes.checkedTask : ""}`}>
+        <Card.Body className={cardClasses.join(" ")}>
           <input type="checkbox" onClick={this.checkboxToggle} />
 
           {disabled ? (
@@ -54,6 +76,49 @@ class Task extends React.PureComponent {
           <Card.Text className={classes.dateLine}>
             Date: {task.date ? formatDate(task.date) : "None"}
           </Card.Text>
+          <Card.Text className="text-info">Status: {task.status}</Card.Text>
+
+          {task.status === "active" ? (
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip>
+                  <strong>Mark as done</strong>.
+                </Tooltip>
+              }
+            >
+              <Button
+                variant="success"
+                disabled={disabled}
+                onClick={() => {
+                  changeTaskStatus(task._id, { status: "done" });
+                }}
+                className="m-2"
+              >
+                <FontAwesomeIcon icon={faCheck} />
+              </Button>
+            </OverlayTrigger>
+          ) : (
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip>
+                  <strong>Mark as active</strong>.
+                </Tooltip>
+              }
+            >
+              <Button
+                variant="warning"
+                disabled={disabled}
+                onClick={() => {
+                  changeTaskStatus(task._id, { status: "active" });
+                }}
+                className="m-2"
+              >
+                <FontAwesomeIcon icon={faHistory} />
+              </Button>
+            </OverlayTrigger>
+          )}
 
           <OverlayTrigger
             placement="top"
@@ -95,6 +160,7 @@ class Task extends React.PureComponent {
 
 const mapDispatchToProps = {
   removeTask,
+  changeTaskStatus,
 };
 
 Task.propTypes = {

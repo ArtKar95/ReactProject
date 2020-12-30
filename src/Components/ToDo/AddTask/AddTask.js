@@ -56,11 +56,12 @@ class AddTask extends React.PureComponent {
 
     if (title.length > 30) {
       this.setState({ valid: false, validationType: "lengthError" });
-      return this.props.showAlertAC(
+      return this.props.showAlert(
         "The title cannot be more than 30 characters "
       );
     }
 
+    date = date || new Date();
     const data = {
       title,
       description,
