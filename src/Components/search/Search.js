@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import { connect } from "react-redux";
 import { getTasks } from "../../redux/actionCreator";
-import { shortStr } from "../../Helpers/utils";
+import { shortStr } from '../../Helpers/utils';
 
 const statusOptions = [
   {
@@ -163,7 +163,7 @@ const Search = (props) => {
             </Dropdown.Item>
           ))}
         </DropdownButton>
-
+        
         <InputGroup.Append>
           <Button variant="primary" className="mr-4" onClick={handleSearch}>
             Search

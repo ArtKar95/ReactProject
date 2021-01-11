@@ -11,16 +11,13 @@ const Nav = () => {
             My Tasks
           </NavLink>
         </li>
-        <li>
-          <NavLink to="/egw" exact activeClassName={classes.activeLink}>
-            Deleted-Tasks
-          </NavLink>
-        </li>
+
         <li>
           <NavLink to="/we" exact activeClassName={classes.activeLink}>
             Account
           </NavLink>
         </li>
+
         <li>
           <NavLink to="/w" exact activeClassName={classes.activeLink}>
             Settings

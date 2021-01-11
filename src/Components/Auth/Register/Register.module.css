@@ -1,0 +1,23 @@
+.main {
+  min-height: calc(100vh - 130px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main h2 {
+  color: white;
+  text-align: center;
+  margin: 22px;
+}
+
+.form {
+  background-color: rgb(75, 68, 68);
+  padding: 15px;
+  border: 3px solid rgb(119, 115, 115);
+  border-radius: 18px;
+}
+
+.invalid {
+  border: 2px solid red;
+}

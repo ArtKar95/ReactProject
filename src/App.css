@@ -4,14 +4,14 @@
   grid-template-areas: "h h" "c n";
 
   grid-template-rows: 80px 1fr;
-  grid-template-columns: 1fr 180px;
+  grid-template-columns: 1fr 170px;
   grid-gap: 20px;
 }
 
 .appContainer {
   grid-area: c;
   background-color: rgb(187, 185, 185);
-  min-height: 81vh;
+  min-height: 80vh;
 }
 
 

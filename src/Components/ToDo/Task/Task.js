@@ -48,7 +48,7 @@ class Task extends React.PureComponent {
     }
 
     return (
-      <Card className={"my-3 mx-3"}>
+      <Card className={"my-3 mx-2"}>
         <Card.Body className={cardClasses.join(" ")}>
           <input type="checkbox" onClick={this.checkboxToggle} />
 
