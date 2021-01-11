@@ -11,6 +11,8 @@ import ToDo from "./Components/ToDo/ToDo";
 import NotFoundPage from "./Components/NotFound/NotFound";
 import TaskPage from "./Components/TaskPage/TaskPage";
 import Loader from "./Components/Loader/Loader";
+// import Login from './Components/Auth/Login';
+// import Register from "./Components/Auth/Register/Register";
 
 class App extends React.PureComponent {
   componentDidUpdate() {
@@ -32,6 +34,8 @@ class App extends React.PureComponent {
           <Switch>
             <Route path="/" exact component={ToDo} />
             <Route path="/task/:id" exact component={TaskPage} />
+            {/* <Route path="/register" exact component={Register} /> */}
+            {/* <Route path="/login" exact component={Login} /> */}
             <Route path="*" exact component={NotFoundPage} />
             {/* <Route path="/not-found" exact component={NotFoundPage} />
           <Redirect to="/not-found" /> */}
