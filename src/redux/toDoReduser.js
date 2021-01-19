@@ -1,4 +1,5 @@
-import * as actionTypes from "./actionTypes";
+import * as taskActionTypes from "./taskActionTypes";
+import { LOGOUT_SUCCESS, AUTH_LOADING } from "./authActionTypes";
 
 const initState = {
   tasks: [],
@@ -22,10 +23,21 @@ const toDoReduser = (state = initState, action) => {
   };
 
   switch (action.type) {
-    case actionTypes.LOADING:
+    case LOGOUT_SUCCESS:
+      return initState;
+
+    case AUTH_LOADING: {
+      return {
+        ...state,
+        successMessage: null,
+        error: null,
+      };
+    }
+
+    case taskActionTypes.LOADING:
       return loadingState;
 
-    case actionTypes.FAILURE: {
+    case taskActionTypes.FAILURE: {
       return {
         ...state,
         loading: false,
@@ -33,21 +45,21 @@ const toDoReduser = (state = initState, action) => {
       };
     }
 
-    case actionTypes.SHOW_ALERT: {
+    case taskActionTypes.SHOW_ALERT: {
       return {
         ...state,
         alert: action.payload,
       };
     }
 
-    case actionTypes.HIDE_ALERT: {
+    case taskActionTypes.HIDE_ALERT: {
       return {
         ...state,
         alert: null,
       };
     }
 
-    case actionTypes.GET_TASKS_SUCCESS: {
+    case taskActionTypes.GET_TASKS_SUCCESS: {
       return {
         ...state,
         loading: false,
@@ -55,7 +67,7 @@ const toDoReduser = (state = initState, action) => {
       };
     }
 
-    case actionTypes.GET_TASK_SUCCESS: {
+    case taskActionTypes.GET_TASK_SUCCESS: {
       return {
         ...state,
         loading: false,
@@ -63,7 +75,7 @@ const toDoReduser = (state = initState, action) => {
       };
     }
 
-    case actionTypes.ADD_TASK_SUCCESS: {
+    case taskActionTypes.ADD_TASK_SUCCESS: {
       return {
         ...state,
         loading: false,
@@ -73,15 +85,15 @@ const toDoReduser = (state = initState, action) => {
       };
     }
 
-    case actionTypes.ADDING_TASK: {
+    case taskActionTypes.ADDING_TASK: {
       return { ...loadingState, addTaskSuccess: false };
     }
 
-    case actionTypes.EDITING_TASK: {
+    case taskActionTypes.EDITING_TASK: {
       return { ...loadingState, editTaskSuccess: false };
     }
 
-    case actionTypes.EDIT_TASK_SUCCESS: {
+    case taskActionTypes.EDIT_TASK_SUCCESS: {
       const newState = {
         ...state,
         loading: false,
@@ -107,11 +119,11 @@ const toDoReduser = (state = initState, action) => {
       }
     }
 
-    case actionTypes.CHANGING_TASK_STATUS: {
+    case taskActionTypes.CHANGING_TASK_STATUS: {
       return loadingState;
     }
 
-    case actionTypes.CHANGE_TASK_STATUS_SUCCESS: {
+    case taskActionTypes.CHANGE_TASK_STATUS_SUCCESS: {
       const newState = {
         ...state,
         loading: false,
@@ -139,14 +151,14 @@ const toDoReduser = (state = initState, action) => {
       }
     }
 
-    case actionTypes.REMOVING_TASK: {
+    case taskActionTypes.REMOVING_TASK: {
       return {
         ...loadingState,
         removeTaskSuccess: false,
       };
     }
 
-    case actionTypes.REMOVE_TASK_SUCCESS: {
+    case taskActionTypes.REMOVE_TASK_SUCCESS: {
       const newState = {
         ...state,
         loading: false,
@@ -170,10 +182,10 @@ const toDoReduser = (state = initState, action) => {
       }
     }
 
-    case actionTypes.REMOVING_TASKS:
+    case taskActionTypes.REMOVING_TASKS:
       return { ...loadingState, removeTasksSuccess: false };
 
-    case actionTypes.REMOVE_TASKS_SUCCESS: {
+    case taskActionTypes.REMOVE_TASKS_SUCCESS: {
       let newTasks = [...state.tasks];
 
       action.payload.forEach((taskId) => {

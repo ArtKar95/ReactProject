@@ -14,7 +14,7 @@ import {
   getTask,
   removeTask,
   changeTaskStatus,
-} from "../../redux/actionCreator";
+} from "../../redux/taskActionCreator";
 import NotFoundPage from "../NotFound/NotFound";
 import { formatDate } from "../../Helpers/utils";
 
@@ -163,9 +163,9 @@ class TaskPage extends React.PureComponent {
 
 const mapStateToProps = (state) => {
   return {
-    task: state.task,
-    removeTaskSuccess: state.removeTaskSuccess,
-    editTaskSuccess: state.editTaskSuccess,
+    task: state.toDoReduser.task,
+    removeTaskSuccess: state.toDoReduser.removeTaskSuccess,
+    editTaskSuccess: state.toDoReduser.editTaskSuccess,
   };
 };
 
@@ -175,7 +175,3 @@ const mapDispatchToProps = {
   changeTaskStatus,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(TaskPage);
-
-
-
-

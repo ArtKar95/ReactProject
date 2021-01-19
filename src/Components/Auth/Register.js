@@ -1,19 +1,25 @@
 import React, { useState } from "react";
 import classes from "./Auth.module.css";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { login } from "../../redux/authActionCreator";
+import { Link } from "react-router-dom";
+import { register } from "../../redux/authActionCreator";
 
-const Login = (props) => {
+const Register = (props) => {
   const [values, setValues] = useState({
     email: "",
     password: "",
+    confirmPassword: "",
+    name: "",
+    surname: "",
   });
 
   const [errors, setErrors] = useState({
     email: null,
     password: null,
+    confirmPassword: null,
+    name: null,
+    surname: null,
   });
 
   const handleChange = ({ target: { name, value } }) => {
@@ -29,11 +35,12 @@ const Login = (props) => {
   };
 
   const handleSend = () => {
-    const { email, password } = values;
+    const { name, surname, email, password, confirmPassword } = values;
 
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     let valid = true;
+    let confirmPasswordMessage = null;
     let emailMessage = null;
     let passwordMessage = null;
 
@@ -53,13 +60,24 @@ const Login = (props) => {
       valid = false;
     }
 
+    if (!confirmPassword) {
+      confirmPasswordMessage = "Please confirm password";
+      valid = false;
+    } else if (password !== confirmPassword) {
+      confirmPasswordMessage = "Passwords didn't match";
+      valid = false;
+    }
+
     setErrors({
+      name: name ? null : "Name is required",
+      surname: surname ? null : "Surname is required",
       email: emailMessage,
       password: passwordMessage,
+      confirmPassword: confirmPasswordMessage,
     });
 
-    if (valid) {
-      props.login(values);
+    if (name && surname && valid) {
+      props.register(values);
     }
   };
 
@@ -70,8 +88,31 @@ const Login = (props) => {
           <Col xs={11} sm={11} md={7}>
             <div className={classes.form}>
               <Form>
-                <h2>Login page</h2>
-
+                <h2>Register page</h2>
+                <Form.Group>
+                  <Form.Control
+                    type="text"
+                    name="name"
+                    value={values.name}
+                    onChange={handleChange}
+                    placeholder="Enter your name"
+                    className={!!errors.name ? classes.invalid : ""}
+                  />
+                  <Form.Text className="text-danger">{errors.name}</Form.Text>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Control
+                    type="text"
+                    name="surname"
+                    value={values.surname}
+                    onChange={handleChange}
+                    placeholder="Enter your surname"
+                    className={!!errors.surname ? classes.invalid : ""}
+                  />
+                  <Form.Text className="text-danger">
+                    {errors.surname}
+                  </Form.Text>
+                </Form.Group>
                 <Form.Group>
                   <Form.Control
                     type="email"
@@ -83,7 +124,6 @@ const Login = (props) => {
                   />
                   <Form.Text className="text-danger">{errors.email}</Form.Text>
                 </Form.Group>
-
                 <Form.Group>
                   <Form.Control
                     type="password"
@@ -97,17 +137,29 @@ const Login = (props) => {
                     {errors.password}
                   </Form.Text>
                 </Form.Group>
-
+                <Form.Group>
+                  <Form.Control
+                    type="password"
+                    name="confirmPassword"
+                    value={values.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Confirm password"
+                    className={!!errors.confirmPassword ? classes.invalid : ""}
+                  />
+                  <Form.Text className="text-danger">
+                    {errors.confirmPassword}
+                  </Form.Text>
+                </Form.Group>
                 <Form.Group className="text-center">
                   <Button
                     variant="success"
                     onClick={handleSend}
                     className="px-5 mb-2"
                   >
-                    Login
-                  </Button>{" "}
+                    Register
+                  </Button>
                   <br />
-                  <Link to="/register">Dont have account? Register now</Link>
+                  <Link to="/login">Already registered? try to login!</Link>
                 </Form.Group>
               </Form>
             </div>
@@ -118,14 +170,8 @@ const Login = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    registerSuccess: state.authReduser.registerSuccess,
-  };
-};
-
 const mapDispatchToProps = {
-  login,
+  register,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(Register);

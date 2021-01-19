@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { removeTask, changeTaskStatus } from "../../../redux/actionCreator";
+import { removeTask, changeTaskStatus } from "../../../redux/taskActionCreator";
 import { connect } from "react-redux";
 import { formatDate, shortStr } from "../../../Helpers/utils";
 

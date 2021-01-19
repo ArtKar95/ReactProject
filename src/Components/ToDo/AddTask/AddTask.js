@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import classes from "./AddTask.module.css";
 import { TitleAlert } from "../../Alerts/Alerts";
-import { showAlert, addTask } from "../../../redux/actionCreator";
+import { showAlert, addTask } from "../../../redux/taskActionCreator";
 import { connect } from "react-redux";
 
 class AddTask extends React.PureComponent {
@@ -145,7 +145,7 @@ class AddTask extends React.PureComponent {
 
 const mapStateToProps = (state) => {
   return {
-    alert: state.alert,
+    alert: state.toDoReduser.alert,
   };
 };
 

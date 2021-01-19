@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import classes from "./AddTask/AddTask.module.css";
 import { connect } from "react-redux";
-import { editTask } from "../../redux/actionCreator";
+import { editTask } from "../../redux/taskActionCreator";
 
 class EditTaskModal extends React.PureComponent {
   constructor(props) {
