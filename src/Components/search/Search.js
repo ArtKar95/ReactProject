@@ -9,7 +9,7 @@ import {
   Dropdown,
 } from "react-bootstrap";
 import { connect } from "react-redux";
-import { getTasks } from "../../redux/actionCreator";
+import { getTasks } from "../../redux/taskActionCreator";
 import { shortStr } from '../../Helpers/utils';
 
 const statusOptions = [

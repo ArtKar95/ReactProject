@@ -4,7 +4,7 @@ import Task from "./Task/Task";
 import AddTask from "./AddTask/AddTask";
 import Confirm from "./Confirm";
 import EditTaskModal from "./EditTaskModal";
-import { getTasks, editTask, removeTasks } from "../../redux/actionCreator";
+import { getTasks, editTask, removeTasks } from "../../redux/taskActionCreator";
 import { connect } from "react-redux";
 import Search from "../search/Search";
 
@@ -124,10 +124,10 @@ class ToDo extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    tasks: state.tasks,
-    addTaskSuccess: state.addTaskSuccess,
-    removeTasksSuccess: state.removeTasksSuccess,
-    editTaskSuccess: state.editTaskSuccess,
+    tasks: state.toDoReduser.tasks,
+    addTaskSuccess: state.toDoReduser.addTaskSuccess,
+    removeTasksSuccess: state.toDoReduser.removeTasksSuccess,
+    editTaskSuccess: state.toDoReduser.editTaskSuccess,
   };
 };
 

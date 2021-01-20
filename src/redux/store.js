@@ -1,8 +1,9 @@
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, combineReducers } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import logger from "redux-logger";
-import toDoReduser from "./reduser";
+import toDoReduser from "./toDoReduser";
+import authReduser from "./authReduser";
 
 const middlewaresArr = [thunk];
 if (process.env.NODE_ENV === "development") {
@@ -11,6 +12,11 @@ if (process.env.NODE_ENV === "development") {
 
 const middleWares = applyMiddleware(...middlewaresArr);
 
-const store = createStore(toDoReduser, composeWithDevTools(middleWares));
+const mainReduser = combineReducers({
+  toDoReduser,
+  authReduser,
+});
+
+const store = createStore(mainReduser, composeWithDevTools(middleWares));
 
 export default store;

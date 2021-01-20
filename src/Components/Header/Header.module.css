@@ -1,16 +1,15 @@
 .header {
   grid-area: h;
-  background-color:rgb(75, 68, 68);
+  background-color: rgb(75, 68, 68);
   display: flex;
   flex-direction: row;
 }
 
-.logo{
+.logo {
   width: 100%;
 }
 
-
-.toDo{
+.toDo {
   width: 80%;
   text-align: center;
   color: rgb(225, 217, 233);
@@ -18,6 +17,16 @@
   font-size: 36px;
 }
 
-.logOut{
-  color: rgb(225, 217, 233);
+a {
+  font-size: 19px;
+  font-weight: 800;
+  user-select: none;
+  margin: auto;
+  margin-right: 30px;
+}
+
+.activeLink {
+  color: rgb(230, 222, 238);
+  text-shadow: 2px 2px 9px rgb(230, 222, 238);
+  font-size: 24px;
 }
