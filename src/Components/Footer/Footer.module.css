@@ -1,0 +1,26 @@
+.footer {
+  grid-area: f;
+  background-color: rgb(75, 68, 68);
+  color: rgb(230, 222, 238);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.footer a {
+  margin-left: 12px;
+  margin-right: 4px;
+  color: rgb(230, 222, 238);
+}
+
+.footer a:hover {
+  color: rgb(124, 152, 179);
+}
+
+
+@media only screen and (max-width: 800px) {
+  .footer> span{
+    font-size: 13px;
+  }
+}

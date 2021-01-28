@@ -63,7 +63,7 @@ class Task extends React.PureComponent {
                 </Tooltip>
               }
             >
-              <Link to={`/task/${task._id}`}>
+              <Link to={`/task/${task._id}`} className="m-0 p-0">
                 <Card.Title>{shortStr(task.title, 10)}</Card.Title>
               </Link>
             </OverlayTrigger>
@@ -74,7 +74,7 @@ class Task extends React.PureComponent {
           </Card.Text>
 
           <Card.Text className={classes.dateLine}>
-            Date: {task.date ? formatDate(task.date) : "None"}
+            Dead: {task.date ? formatDate(task.date) : "None"}
           </Card.Text>
           <Card.Text className="text-info">Status: {task.status}</Card.Text>
 

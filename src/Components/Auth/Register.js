@@ -85,7 +85,7 @@ const Register = (props) => {
     <div className={classes.main}>
       <Container>
         <Row className="justify-content-center">
-          <Col xs={11} sm={11} md={7}>
+          <Col xs={12} sm={12} md={7}>
             <div className={classes.form}>
               <Form>
                 <h2>Register page</h2>

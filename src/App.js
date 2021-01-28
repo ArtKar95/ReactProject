@@ -13,8 +13,11 @@ import TaskPage from "./Components/TaskPage/TaskPage";
 import Loader from "./Components/Loader/Loader";
 import Login from "./Components/Auth/Login";
 import Register from "./Components/Auth/Register";
-import HomePage from "./Components/Home/HomePage";
+import AboutPage from "./Components/About/AboutPage";
 import CustomRoute from "./Components/CustomRoute";
+import Footer from "./Components/Footer/Footer";
+import Contact from "./Components/Contact/Contact";
+import Settings from "./Components/Settings/Settings";
 
 class App extends React.PureComponent {
   componentDidUpdate() {
@@ -39,21 +42,28 @@ class App extends React.PureComponent {
       <div className="app">
         <Header />
         <Nav />
+        <Footer />
         <div className="appContainer">
           <Switch>
-            <Route path="/" exact component={HomePage} />
-            <CustomRoute type="private" path="/tasks" exact component={ToDo} />
+            <Route path="/about" exact component={AboutPage} />
+            <Route path="/contact" exact component={Contact} />
+            <CustomRoute type="private" path="/" exact component={ToDo} />
             <CustomRoute
               type="private"
               path="/task/:id"
               exact
               component={TaskPage}
             />
+            <CustomRoute
+              type="private"
+              path="/settings"
+              exact
+              component={Settings}
+            />
+
             <CustomRoute path="/register" exact component={Register} />
             <CustomRoute path="/login" exact component={Login} />
             <Route path="*" exact component={NotFoundPage} />
-            {/* <Route path="/not-found" exact component={NotFoundPage} />
-          <Redirect to="/not-found" /> */}
           </Switch>
         </div>
 

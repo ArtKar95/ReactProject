@@ -8,41 +8,63 @@ import { logout } from "../../redux/authActionCreator";
 const Nav = ({ isAuthenticated, logout }) => {
   return (
     <div className={classes.nav}>
-      {isAuthenticated && (
-        <ul>
-          <li>
-            <NavLink to="/" exact activeClassName={classes.activeLink}>
-              Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/tasks" exact activeClassName={classes.activeLink}>
-              My Tasks
-            </NavLink>
-          </li>
+      <ul>
+        <li>
+          <NavLink to="/about" exact activeClassName={classes.activeLink}>
+            About
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/contact" exact activeClassName={classes.activeLink}>
+            Contact
+          </NavLink>
+        </li>
 
-          <li>
-            <NavLink to="/we" exact activeClassName={classes.activeLink}>
-              Account
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/w" exact activeClassName={classes.activeLink}>
-              Settings
-            </NavLink>
-          </li>
-          <li>
-            <Button
-              variant="secondary"
-              className="mt-2 text-info"
-              onClick={logout}
-            >
-              Logout
-            </Button>
-          </li>
-        </ul>
-      )}
+        {isAuthenticated ? (
+          <>
+            <li>
+              <NavLink to="/" exact activeClassName={classes.activeLink}>
+                Tasks
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/settings"
+                exact
+                activeClassName={classes.activeLink}
+              >
+                Settings
+              </NavLink>
+            </li>
+            <li>
+              <Button
+                variant="secondary"
+                className={`text-info p-1 ${classes.logout}`}
+                onClick={logout}
+              >
+                Logout
+              </Button>
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <NavLink to="/login" exact activeClassName={classes.activeLink}>
+                Login
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/register"
+                exact
+                activeClassName={classes.activeLink}
+              >
+                Register
+              </NavLink>
+            </li>
+          </>
+        )}
+      </ul>
     </div>
   );
 };

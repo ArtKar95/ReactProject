@@ -1,11 +1,11 @@
-import request from "../Helpers/request";
+import { request, requestWithoutJwt } from "../Helpers/request";
 import * as authActionTypes from "./authActionTypes";
 import {
   saveJwt,
   removeJwt,
-  getJwt,
   loginRequest,
   registerRequest,
+  getLocalJwt,
 } from "../Helpers/auth";
 import { history } from "../Helpers/history";
 
@@ -15,13 +15,12 @@ export const register = (data) => {
   return async (dispatch) => {
     try {
       dispatch({ type: authActionTypes.AUTH_LOADING });
-      const response = await registerRequest(data);
+      await registerRequest(data);
 
       dispatch({
         type: authActionTypes.REGISTER_SUCCESS,
-        payload: response._id,
       });
-      history.push("/tasks");
+      history.push("/login");
     } catch (err) {
       dispatch({ type: authActionTypes.AUTH_FAILURE, payload: err.message });
     }
@@ -37,7 +36,7 @@ export const login = (data) => {
       dispatch({
         type: authActionTypes.LOGIN_SUCCESS,
       });
-      history.push("/tasks");
+      history.push("/");
     } catch (err) {
       dispatch({ type: authActionTypes.AUTH_FAILURE, payload: err.message });
     }
@@ -48,12 +47,76 @@ export const logout = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: authActionTypes.AUTH_LOADING });
-      await request(`${apiUrl}/user/sign-out`, "POST", { jwt: await getJwt() });
-      removeJwt();
+
+      const jwt = getLocalJwt();
+
+      if (jwt) {
+        await requestWithoutJwt(`${apiUrl}/user/sign-out`, "POST", {
+          jwt: jwt,
+        });
+        removeJwt();
+        dispatch({ type: authActionTypes.LOGOUT_SUCCESS });
+        history.push("/");
+      } else {
+        dispatch({ type: authActionTypes.LOGOUT_SUCCESS });
+        history.push("/");
+      }
+    } catch (err) {
+      dispatch({ type: authActionTypes.AUTH_FAILURE, payload: err.message });
+    }
+  };
+};
+
+export const getUserInfo = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: authActionTypes.AUTH_LOADING });
+      const userInfo = await request(`${apiUrl}/user`);
+      dispatch({ type: authActionTypes.GET_USER_INFO, payload: userInfo });
+    } catch (err) {
+      dispatch({ type: authActionTypes.AUTH_FAILURE, payload: err.message });
+    }
+  };
+};
+
+export const sendMessage = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: authActionTypes.AUTH_LOADING });
+      await requestWithoutJwt(`${apiUrl}/form`, "POST", data);
+
+      dispatch({ type: authActionTypes.SEND_MESSAGE });
+    } catch (err) {
+      dispatch({ type: authActionTypes.AUTH_FAILURE, payload: err.message });
+    }
+  };
+};
+
+export const updateUserInfo = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: authActionTypes.AUTH_LOADING });
+
+      const userInfo = await request(`${apiUrl}/user`, "PUT", data);
+
+      dispatch({ type: authActionTypes.UPDATE_USER_INFO, payload: userInfo });
+    } catch (err) {
+      dispatch({ type: authActionTypes.AUTH_FAILURE, payload: err.message });
+    }
+  };
+};
+
+export const updateUserPassword = (data) => {
+  console.log(data);
+  return async (dispatch) => {
+    try {
+      dispatch({ type: authActionTypes.AUTH_LOADING });
+
+      await request(`${apiUrl}/user/password`, "PUT", data);
+
       dispatch({
-        type: authActionTypes.LOGOUT_SUCCESS,
+        type: authActionTypes.UPDATE_USER_PASSWORD,
       });
-      history.push("/");
     } catch (err) {
       dispatch({ type: authActionTypes.AUTH_FAILURE, payload: err.message });
     }

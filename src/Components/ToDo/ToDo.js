@@ -1,4 +1,5 @@
 import React from "react";
+import classes from "./ToDo.module.css";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Task from "./Task/Task";
 import AddTask from "./AddTask/AddTask";
@@ -69,7 +70,15 @@ class ToDo extends React.Component {
     const { tasks } = this.props;
     const tasksComponents = tasks.map((task) => {
       return (
-        <Col key={task._id} xl={3} lg={4} md={6} sm={12} xs={12}>
+        <Col
+          key={task._id}
+          xl={3}
+          lg={4}
+          md={6}
+          sm={6}
+          xs={11}
+          className={classes.task}
+        >
           <Task
             task={task}
             takeCheckedTasks={this.takeCheckedTasks(task._id)}
@@ -81,29 +90,29 @@ class ToDo extends React.Component {
     });
     return (
       <Container fluid>
-        <Search />
         <Row>
-          <Col md={{ span: 6, offset: 3 }} className="text-center">
+          <Col className="my-4 text-center">
+            <Search disabled={!!checkedTasks.size} />
             <Button
-              className="m-3 "
-              variant="primary"
+              className="mx-1 my-1 px-3"
+              variant="success"
               disabled={checkedTasks.size}
               onClick={this.toggleNewTaskModal}
             >
-              Add your task
+              Add  task
+            </Button>
+
+            <Button
+              variant="danger"
+              disabled={!checkedTasks.size}
+              onClick={this.changeShowConfirm}
+            >
+              Delete Selecteds
             </Button>
           </Col>
         </Row>
         <Row> {tasksComponents}</Row>
-        <Row className="justify-content-center">
-          <Button
-            variant="danger"
-            disabled={!checkedTasks.size}
-            onClick={this.changeShowConfirm}
-          >
-            Delete Selecteds
-          </Button>
-        </Row>
+
         {!!showConfirm && (
           <Confirm
             count={checkedTasks.size}

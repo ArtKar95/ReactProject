@@ -1,0 +1,23 @@
+h2 {
+  color: rgb(75, 68, 68);
+  margin: 25px;
+}
+
+.invalid {
+  border: 2px solid red;
+}
+
+@media only screen and (max-width: 923px) {
+  h2 {
+    font-size: 25px;
+  }
+}
+
+
+@media only screen and (max-width: 407px) {
+  h2 {
+    font-size: 17px;
+  }
+
+}
+
