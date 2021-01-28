@@ -91,7 +91,6 @@ const Settings = ({ updateUserInfo, updateUserPassword }) => {
 
     if (oldPassword && valid) {
       updateUserPassword({ oldPassword, newPassword, confirmNewPassword });
-
       setValues({
         ...values,
         oldPassword: "",
