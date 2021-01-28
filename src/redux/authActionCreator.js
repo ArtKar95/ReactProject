@@ -107,7 +107,6 @@ export const updateUserInfo = (data) => {
 };
 
 export const updateUserPassword = (data) => {
-  console.log(data);
   return async (dispatch) => {
     try {
       dispatch({ type: authActionTypes.AUTH_LOADING });
