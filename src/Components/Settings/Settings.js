@@ -91,7 +91,7 @@ const Settings = ({ updateUserInfo, updateUserPassword }) => {
 
     if (oldPassword && valid) {
       updateUserPassword({ oldPassword, newPassword, confirmNewPassword });
-      console.log("dhvckwvs");
+
       setValues({
         ...values,
         oldPassword: "",

@@ -1,8 +1,29 @@
 .notFound {
   width: 100%;
-  min-height: 81vh;
+  height: 81vh;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url(./../../assets/images/notFound.gif);
+}
+
+@media only screen and (max-width: 500px) {
+  .notFound {
+    margin-top: 28px;
+    height: 70vh;
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .notFound {
+    margin-top: 35px;
+    height: 60vh;
+  }
+}
+
+@media only screen and (max-width: 380px) {
+  .notFound {
+    margin-top: 65px;
+    height: 51vh;
+  }
 }
