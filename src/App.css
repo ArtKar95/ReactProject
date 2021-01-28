@@ -1,9 +1,9 @@
 .app {
   display: grid;
   width: 100%;
-  grid-template-areas: "h h" "c n";
+  grid-template-areas: "h h" "c n" "f n";
 
-  grid-template-rows: 80px 1fr;
+  grid-template-rows: 70px 1fr 60px;
   grid-template-columns: 1fr 170px;
   grid-gap: 20px;
 }
@@ -14,7 +14,22 @@
   min-height: 80vh;
 }
 
-
-.add{
+.add {
   position: fixed;
+}
+
+@media only screen and (max-width: 850px) {
+  .app {
+    grid-template-columns: 1fr 140px;
+  }
+}
+
+@media only screen and (max-width: 693px) {
+  .app {
+    grid-template-areas: "h h" "n n" "c c" "f f";
+
+    grid-template-rows: 70px 50px 1fr 50px;
+    grid-template-columns: 1fr;
+    grid-gap: 12px;
+  }
 }

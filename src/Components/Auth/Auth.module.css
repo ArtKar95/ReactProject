@@ -26,3 +26,25 @@
   font-size: 15px;
   margin-left: 20px;
 }
+
+@media only screen and (max-width: 840px) {
+  .form {
+    padding: 11px;
+    margin: 10px;
+  }
+  .main h2 {
+    font-size: 20px;
+  }
+  .main a {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (max-width: 329px) {
+  .main a {
+    margin: auto;
+  }
+  .form{
+    padding: 5px;
+  }
+}

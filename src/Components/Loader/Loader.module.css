@@ -87,3 +87,9 @@
     opacity: 0;
   }
 }
+
+@media only screen and (max-width: 693px) {
+  .containerLoader {
+    margin-left: 100px;
+  }
+}

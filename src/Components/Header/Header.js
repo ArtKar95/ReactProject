@@ -1,32 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import classes from "./Header.module.css";
 import logoToDo from "../../assets/images/logoToDo.jpg";
-import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
+import { getUserInfo } from "../../redux/authActionCreator";
+import { firstLatter } from "../../Helpers/utils";
 
-const Header = (props) => {
+const Header = ({ isAuthenticated, getUserInfo, userInfo }) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      getUserInfo();
+    }
+  }, [getUserInfo, isAuthenticated]);
+
   return (
     <div className={classes.header}>
-      <img
-        className={classes.logo}
-        src={logoToDo}
-        alt="Logo"
-        style={{ width: "113px" }}
-      />
+      <img className={classes.logo} src={logoToDo} alt="Logo" />
       <h1 className={classes.toDo}>&#9734;&#9734;&#9734; My To-Do-List </h1>
-      {!props.isAuthenticated && (
-        <>
-          <NavLink to="/" exact activeClassName={classes.activeLink}>
-            Home
-          </NavLink>
-          <NavLink to="/register" exact activeClassName={classes.activeLink}>
-            Register
-          </NavLink>
-          <NavLink to="/login" exact activeClassName={classes.activeLink}>
-            Login
-          </NavLink>
-        </>
-      )}
+      <div>
+        {!!isAuthenticated && (
+          <div>
+            {userInfo ? (
+              <>
+                <span className={classes.nameIcon}>
+                  {`${firstLatter(userInfo.name)}${firstLatter(
+                    userInfo.surname
+                  )}`}
+                </span>
+                <span>{`${userInfo.name} ${userInfo.surname}`}</span>
+              </>
+            ) : (
+              " "
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -34,7 +41,12 @@ const Header = (props) => {
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.authReduser.isAuthenticated,
+    userInfo: state.authReduser.userInfo,
   };
 };
 
-export default connect(mapStateToProps, null)(Header);
+const mapDispatchToProps = {
+  getUserInfo,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

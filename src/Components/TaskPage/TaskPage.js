@@ -175,7 +175,3 @@ const mapDispatchToProps = {
   changeTaskStatus,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(TaskPage);
-
-
-
-

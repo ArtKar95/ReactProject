@@ -92,5 +92,14 @@ export const authRequest = (data, type) => {
 
 function logout() {
   store.dispatch({ type: LOGOUT_SUCCESS });
+  removeJwt();
   history.push("/login");
+}
+
+export function getLocalJwt() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return null;
+  }
+  return JSON.parse(token).jwt;
 }

@@ -4,21 +4,63 @@
   font-size: 19px;
   font-weight: 800;
   user-select: none;
-
 }
 
 .nav > ul {
   list-style: none;
-  margin-top: 40px;
-  margin-left: -18px;
+  margin-top: 30px;
+  position: fixed;
 }
 
-.nav > li {
-  margin-top: 25px;
+.nav > ul > li {
+  margin-top: 13px;
 }
 
 .activeLink {
   color: rgb(230, 222, 238);
   text-shadow: 2px 2px 9px rgb(230, 222, 238);
   font-size: 22px;
+}
+
+@media only screen and (max-width: 850px) {
+  .nav {
+    font-size: 14px;
+  }
+  .activeLink {
+    font-size: 17px;
+  }
+}
+
+@media only screen and (max-width: 693px) {
+  .nav > ul {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 0px;
+    position: unset;
+  }
+
+  .nav > ul > li {
+    float: left;
+  }
+
+  .logout {
+    margin-top: -5px;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .nav {
+    font-size: 11px;
+  }
+  .activeLink {
+    font-size: 12px;
+  }
+
+  .nav > ul {
+    justify-content: space-around;
+  }
+
+  .nav > ul > li {
+    margin-right: 12px;
+  }
 }
