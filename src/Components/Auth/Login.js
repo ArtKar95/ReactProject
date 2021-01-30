@@ -105,7 +105,7 @@ const Login = (props) => {
                     className="px-5 mb-2"
                   >
                     Login
-                  </Button>{" "}
+                  </Button>
                   <br />
                   <Link to="/register">Dont have account? Register now</Link>
                 </Form.Group>

@@ -1,17 +1,18 @@
 import React, { createRef } from "react";
+import classes from "./AddTask/AddTask.module.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { FormControl, Button, Modal, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import classes from "./AddTask/AddTask.module.css";
 import { connect } from "react-redux";
 import { editTask } from "../../redux/taskActionCreator";
 
 class EditTaskModal extends React.PureComponent {
   constructor(props) {
     super(props);
+
     this.state = {
       ...props.data,
       date: new Date(props.data.date),
@@ -36,6 +37,7 @@ class EditTaskModal extends React.PureComponent {
       this.setState({ [type]: value, valid: true });
       return;
     }
+
     this.setState({ [type]: value });
   };
 
@@ -66,6 +68,7 @@ class EditTaskModal extends React.PureComponent {
       description,
       date: date.toISOString().slice(0, 10),
     };
+
     const { editTask, from } = this.props;
     editTask(_id, data, from);
   };
@@ -131,6 +134,7 @@ class EditTaskModal extends React.PureComponent {
           <Button onClick={this.handelSave} variant="success">
             Save <FontAwesomeIcon icon={faSave} />
           </Button>
+
           <Button onClick={this.props.onCancel} variant="secondary">
             Cancel <FontAwesomeIcon icon={faWindowClose} />
           </Button>

@@ -1,5 +1,6 @@
 import React from "react";
 import classes from "./AboutPage.module.css";
+import { Carousel } from "react-bootstrap";
 import myPhoto from "../../assets/images/owner.jpg";
 import registerPhoto from "../../assets/images/register.png";
 import contactPhoto from "../../assets/images/contact.png";
@@ -12,8 +13,6 @@ import messagePhoto from "../../assets/images/message.png";
 import taskPagePhoto from "../../assets/images/taskPage.png";
 import navPhoto from "../../assets/images/nav.png";
 import goodLuckPhoto from "../../assets/images/goodLuck.jpg";
-
-import { Carousel } from "react-bootstrap";
 
 const AboutPage = () => {
   return (

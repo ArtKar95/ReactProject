@@ -10,13 +10,15 @@
   color: rgb(201, 197, 206);
   text-align: center;
   margin: 10px 0px;
-  font-size: 31px;
+  font-size: 24px;
+  word-break: break-all;
 }
 
 .date {
   text-align: right;
-  margin-top: -45px;
+  margin-top: -10px;
   margin-right: 10px;
+  font-size: 15px;
 }
 .date > span:first-child {
   color: rgb(93, 202, 129);
@@ -24,13 +26,19 @@
 }
 
 .date > span:nth-of-type(2) {
-  color: #027bfb;
-  text-shadow: 6px 6px 12px #027bfb;
+  color: #c49797;
+  text-shadow: 6px 6px 12px #4ed6ad;
+}
+
+.date > span:nth-of-type(3) {
+  color: rgb(131, 27, 27);
+  text-shadow: 6px 6px 12px rgb(131, 27, 27);
 }
 
 .date > span:last-child {
-  color: rgb(131, 27, 27);
-  text-shadow: 6px 6px 12px rgb(131, 27, 27);
+  color: #027bfb;
+  text-shadow: 6px 6px 12px #027bfb;
+  margin: auto;
 }
 
 .taskButtons {
@@ -38,19 +46,19 @@
 }
 
 .taskPage > p {
-  font-size: 23px;
+  font-size: 20px;
   margin: 0px 70px;
   color: white;
   word-break: break-all;
 }
 
-@media only screen and (max-width: 570px) {
+@media only screen and (max-width: 1000px) {
   .taskPage > h1 {
-    font-size: 29px;
+    font-size: 21px;
   }
 
   .date {
-    font-size: 14px;
+    font-size: 13px;
     margin-top: 10px;
     text-align: center;
   }
@@ -62,5 +70,19 @@
   .taskPage > p {
     font-size: 16px;
     margin: 0px 10px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .taskPage > h1 {
+    font-size: 16px;
+  }
+
+  .date {
+    font-size: 12px;
+  }
+
+  .taskPage > p {
+    font-size: 14px;
   }
 }

@@ -1,6 +1,6 @@
 import * as authActionTypes from "./authActionTypes";
 import { checkLoginStatus } from "../Helpers/auth";
-import { LOADING,  } from "./taskActionTypes";
+import { LOADING } from "./taskActionTypes";
 
 const initState = {
   isAuthenticated: checkLoginStatus(),
@@ -8,6 +8,8 @@ const initState = {
   loading: false,
   successMessage: null,
   error: null,
+  sendMessageSuccess: false,
+  updateUserInfoSuccess: false,
 };
 
 const authReduser = (state = initState, action) => {
@@ -16,6 +18,8 @@ const authReduser = (state = initState, action) => {
     loading: true,
     successMessage: null,
     error: null,
+    sendMessageSuccess: false,
+    updateUserInfoSuccess: false,
   };
 
   switch (action.type) {
@@ -59,7 +63,7 @@ const authReduser = (state = initState, action) => {
       };
     }
 
-    case authActionTypes.GET_USER_INFO: {
+    case authActionTypes.GET_USER_INFO_SUCCESS: {
       return {
         ...state,
         loading: false,
@@ -67,24 +71,26 @@ const authReduser = (state = initState, action) => {
       };
     }
 
-    case authActionTypes.SEND_MESSAGE: {
+    case authActionTypes.SEND_MESSAGE_SUCCESS: {
       return {
         ...state,
         loading: false,
         successMessage: "Thanks for the message",
+        sendMessageSuccess: true,
       };
     }
 
-    case authActionTypes.UPDATE_USER_INFO: {
+    case authActionTypes.UPDATE_USER_INFO_SUCCESS: {
       return {
         ...state,
         userInfo: action.payload,
         loading: false,
         successMessage: "Changed successfully",
+        updateUserInfoSuccess: true,
       };
     }
 
-    case authActionTypes.UPDATE_USER_PASSWORD: {
+    case authActionTypes.UPDATE_USER_PASSWORD_SUCCESS: {
       return {
         ...state,
         loading: false,

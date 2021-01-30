@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <div className={classes.footer}>
       <span>
-        Created by Arthur Karapetyan <FontAwesomeIcon icon={faHandPointRight} />
+        Created by Artur Karapetyan <FontAwesomeIcon icon={faHandPointRight} />
         <a
           href="https://github.com/ArtKar95?tab=repositories"
           target="_blank"

@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import classes from "./Settings.module.css";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { connect } from "react-redux";
-import classes from "./Settings.module.css";
 import {
   updateUserInfo,
   updateUserPassword,
 } from "../../redux/authActionCreator";
 
-const Settings = ({ updateUserInfo, updateUserPassword }) => {
+const Settings = ({
+  updateUserInfo,
+  updateUserPassword,
+  updateUserInfoSuccess,
+}) => {
   const [values, setValues] = useState({
     name: "",
     surname: "",
@@ -24,6 +28,18 @@ const Settings = ({ updateUserInfo, updateUserPassword }) => {
     confirmNewPassword: null,
   });
 
+  useEffect(() => {
+    if (updateUserInfoSuccess) {
+      setValues((values) => {
+        return {
+          ...values,
+          name: "",
+          surname: "",
+        };
+      });
+    }
+  }, [updateUserInfoSuccess]);
+
   const handleChange = ({ target: { name, value } }) => {
     setValues({
       ...values,
@@ -36,58 +52,49 @@ const Settings = ({ updateUserInfo, updateUserPassword }) => {
     });
   };
 
-  const handleSend = (type) => {
-    const {
-      name,
-      surname,
-      oldPassword,
-      newPassword,
-      confirmNewPassword,
-    } = values;
+  const handleUpdateUserInfo = () => {
+    const { name, surname } = values;
+
+    setErrors({
+      ...errors,
+      name: name.trim() ? null : "Name is required",
+      surname: surname.trim() ? null : "Surname is required",
+    });
+
+    if (name.trim() && surname.trim()) {
+      updateUserInfo({ name, surname });
+    }
+  };
+
+  const handleUpdateUserPassword = () => {
+    const { oldPassword, newPassword, confirmNewPassword } = values;
 
     let valid = true;
-    let naewPasswordMessage = null;
+    let newPasswordMessage = null;
     let confirmNewPasswordMessage = null;
 
-    if (type === "info") {
-      setErrors({
-        ...errors,
-        name: name.trim() ? null : "Name is required",
-        surname: surname.trim() ? null : "Surname is required",
-      });
-
-      if (name.trim() && surname.trim()) {
-        updateUserInfo({ name, surname });
-        setValues({
-          ...values,
-          name: "",
-          surname: "",
-        });
-      }
-    } else {
-      if (!newPassword) {
-        naewPasswordMessage = "Password is required";
-        valid = false;
-      } else if (newPassword.length < 6) {
-        naewPasswordMessage = "Password can't be shorter than 6 simbol";
-        valid = false;
-      }
-
-      if (!confirmNewPassword) {
-        confirmNewPasswordMessage = "Please confirm new password";
-        valid = false;
-      } else if (newPassword !== confirmNewPassword) {
-        confirmNewPasswordMessage = "Passwords didn't match";
-        valid = false;
-      }
-
-      setErrors({
-        ...errors,
-        oldPassword: oldPassword ? null : "Old password is required",
-        newPassword: naewPasswordMessage,
-        confirmNewPassword: confirmNewPasswordMessage,
-      });
+    if (!newPassword) {
+      newPasswordMessage = "Password is required";
+      valid = false;
+    } else if (newPassword.length < 6) {
+      newPasswordMessage = "Password can't be shorter than 6 simbol";
+      valid = false;
     }
+
+    if (!confirmNewPassword) {
+      confirmNewPasswordMessage = "Please confirm new password";
+      valid = false;
+    } else if (newPassword !== confirmNewPassword) {
+      confirmNewPasswordMessage = "Passwords didn't match";
+      valid = false;
+    }
+
+    setErrors({
+      ...errors,
+      oldPassword: oldPassword ? null : "Old password is required",
+      newPassword: newPasswordMessage,
+      confirmNewPassword: confirmNewPasswordMessage,
+    });
 
     if (oldPassword && valid) {
       updateUserPassword({ oldPassword, newPassword, confirmNewPassword });
@@ -133,13 +140,14 @@ const Settings = ({ updateUserInfo, updateUserPassword }) => {
             <Form.Group>
               <Button
                 variant="success"
-                onClick={() => handleSend("info")}
+                onClick={handleUpdateUserInfo}
                 className="px-5 mb-2"
               >
                 Change
               </Button>
             </Form.Group>
           </Form>
+
           <Form>
             <h2>Change password</h2>
             <Form.Group>
@@ -185,7 +193,7 @@ const Settings = ({ updateUserInfo, updateUserPassword }) => {
             <Form.Group>
               <Button
                 variant="success"
-                onClick={handleSend}
+                onClick={handleUpdateUserPassword}
                 className="px-5 mb-2"
               >
                 Change
@@ -198,6 +206,12 @@ const Settings = ({ updateUserInfo, updateUserPassword }) => {
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    updateUserInfoSuccess: state.authReduser.updateUserInfoSuccess,
+  };
+};
+
 const mapDispatchToProps = { updateUserInfo, updateUserPassword };
 
-export default connect(null, mapDispatchToProps)(Settings);
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

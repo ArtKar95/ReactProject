@@ -1,11 +1,11 @@
 import React, { createRef } from "react";
+import classes from "./AddTask.module.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { FormControl, Button, Modal, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import classes from "./AddTask.module.css";
 import { TitleAlert } from "../../Alerts/Alerts";
 import { showAlert, addTask } from "../../../redux/taskActionCreator";
 import { connect } from "react-redux";
@@ -35,6 +35,7 @@ class AddTask extends React.PureComponent {
       this.setState({ [type]: value, valid: true });
       return;
     }
+
     this.setState({ [type]: value });
   };
 

@@ -15,6 +15,7 @@ export const register = (data) => {
   return async (dispatch) => {
     try {
       dispatch({ type: authActionTypes.AUTH_LOADING });
+
       await registerRequest(data);
 
       dispatch({
@@ -31,8 +32,10 @@ export const login = (data) => {
   return async (dispatch) => {
     try {
       dispatch({ type: authActionTypes.AUTH_LOADING });
+
       const token = await loginRequest(data);
       saveJwt(token);
+
       dispatch({
         type: authActionTypes.LOGIN_SUCCESS,
       });
@@ -55,6 +58,7 @@ export const logout = () => {
           jwt: jwt,
         });
         removeJwt();
+
         dispatch({ type: authActionTypes.LOGOUT_SUCCESS });
         history.push("/");
       } else {
@@ -71,8 +75,13 @@ export const getUserInfo = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: authActionTypes.AUTH_LOADING });
+
       const userInfo = await request(`${apiUrl}/user`);
-      dispatch({ type: authActionTypes.GET_USER_INFO, payload: userInfo });
+
+      dispatch({
+        type: authActionTypes.GET_USER_INFO_SUCCESS,
+        payload: userInfo,
+      });
     } catch (err) {
       dispatch({ type: authActionTypes.AUTH_FAILURE, payload: err.message });
     }
@@ -83,9 +92,10 @@ export const sendMessage = (data) => {
   return async (dispatch) => {
     try {
       dispatch({ type: authActionTypes.AUTH_LOADING });
+
       await requestWithoutJwt(`${apiUrl}/form`, "POST", data);
 
-      dispatch({ type: authActionTypes.SEND_MESSAGE });
+      dispatch({ type: authActionTypes.SEND_MESSAGE_SUCCESS });
     } catch (err) {
       dispatch({ type: authActionTypes.AUTH_FAILURE, payload: err.message });
     }
@@ -99,7 +109,10 @@ export const updateUserInfo = (data) => {
 
       const userInfo = await request(`${apiUrl}/user`, "PUT", data);
 
-      dispatch({ type: authActionTypes.UPDATE_USER_INFO, payload: userInfo });
+      dispatch({
+        type: authActionTypes.UPDATE_USER_INFO_SUCCESS,
+        payload: userInfo,
+      });
     } catch (err) {
       dispatch({ type: authActionTypes.AUTH_FAILURE, payload: err.message });
     }
@@ -114,7 +127,7 @@ export const updateUserPassword = (data) => {
       await request(`${apiUrl}/user/password`, "PUT", data);
 
       dispatch({
-        type: authActionTypes.UPDATE_USER_PASSWORD,
+        type: authActionTypes.UPDATE_USER_PASSWORD_SUCCESS,
       });
     } catch (err) {
       dispatch({ type: authActionTypes.AUTH_FAILURE, payload: err.message });
