@@ -7,6 +7,7 @@ import {
   faEdit,
   faCheck,
   faHistory,
+  faHandPointLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -38,6 +39,7 @@ class Task extends React.PureComponent {
     } = this.props;
 
     const cardClasses = [classes.cardBorder];
+
     if (checked) {
       cardClasses.push(classes.checkedTask);
     }
@@ -50,8 +52,7 @@ class Task extends React.PureComponent {
     return (
       <Card className={"my-3 mx-2"}>
         <Card.Body className={cardClasses.join(" ")}>
-          <input type="checkbox" onClick={this.checkboxToggle} />
-
+          <input type="checkbox" onClick={this.checkboxToggle} />{" "}
           {disabled ? (
             <Card.Title>{shortStr(task.title, 10)}</Card.Title>
           ) : (
@@ -59,25 +60,31 @@ class Task extends React.PureComponent {
               placement="top-start"
               overlay={
                 <Tooltip>
-                  <strong>Go Task</strong>.
+                  <strong>Go Task.</strong>
                 </Tooltip>
               }
             >
               <Link to={`/task/${task._id}`} className="m-0 p-0">
-                <Card.Title>{shortStr(task.title, 10)}</Card.Title>
+                <Card.Title>
+                  {shortStr(task.title, 6)}{" "}
+                  <FontAwesomeIcon
+                    icon={faHandPointLeft}
+                    className="text-info"
+                  />
+                </Card.Title>
               </Link>
             </OverlayTrigger>
           )}
-
           <Card.Text className={classes.descriptionLine}>
             Description: {shortStr(task.description, 6)}
           </Card.Text>
-
+          <Card.Text className="text-success mb-1">
+            CREATED: {formatDate(task.created_at)}
+          </Card.Text>
           <Card.Text className={classes.dateLine}>
-            Dead: {task.date ? formatDate(task.date) : "None"}
+            Deadline: {task.date ? formatDate(task.date) : "None"}
           </Card.Text>
           <Card.Text className="text-info">Status: {task.status}</Card.Text>
-
           {task.status === "active" ? (
             <OverlayTrigger
               placement="top"
@@ -119,7 +126,6 @@ class Task extends React.PureComponent {
               </Button>
             </OverlayTrigger>
           )}
-
           <OverlayTrigger
             placement="top"
             overlay={
@@ -132,7 +138,6 @@ class Task extends React.PureComponent {
               <FontAwesomeIcon icon={faEdit} />
             </Button>
           </OverlayTrigger>
-
           <OverlayTrigger
             placement="top"
             overlay={

@@ -1,12 +1,14 @@
 import React from "react";
 import classes from "./ToDo.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWaze } from "@fortawesome/free-brands-svg-icons";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import Task from "./Task/Task";
-import AddTask from "./AddTask/AddTask";
 import Confirm from "./Confirm";
 import EditTaskModal from "./EditTaskModal";
 import { getTasks, editTask, removeTasks } from "../../redux/taskActionCreator";
 import { connect } from "react-redux";
+import Task from "./Task/Task";
+import AddTask from "./AddTask/AddTask";
 import Search from "../search/Search";
 
 class ToDo extends React.Component {
@@ -43,6 +45,7 @@ class ToDo extends React.Component {
 
   removeCheckedTasks = () => {
     const chackedTasks = [...this.state.checkedTasks];
+
     this.props.removeTasks({ tasks: chackedTasks });
   };
 
@@ -99,7 +102,7 @@ class ToDo extends React.Component {
               disabled={checkedTasks.size}
               onClick={this.toggleNewTaskModal}
             >
-              Add  task
+              Add task
             </Button>
 
             <Button
@@ -111,7 +114,16 @@ class ToDo extends React.Component {
             </Button>
           </Col>
         </Row>
-        <Row> {tasksComponents}</Row>
+        <Row>
+          {!tasks.length ? (
+            <div className={classes.noTasks}>
+              No tasks
+              <FontAwesomeIcon icon={faWaze} size="4x" />
+            </div>
+          ) : (
+            <> {tasksComponents}</>
+          )}
+        </Row>
 
         {!!showConfirm && (
           <Confirm

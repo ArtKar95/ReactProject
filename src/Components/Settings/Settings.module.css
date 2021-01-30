@@ -7,17 +7,14 @@ h2 {
   border: 2px solid red;
 }
 
-@media only screen and (max-width: 923px) {
+@media only screen and (max-width: 1200px) {
   h2 {
     font-size: 25px;
   }
 }
 
-
 @media only screen and (max-width: 407px) {
   h2 {
     font-size: 17px;
   }
-
 }
-

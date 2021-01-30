@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import classes from "./../ToDo/AddTask/AddTask.module.css";
-import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -13,6 +12,7 @@ import {
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getTasks } from "../../redux/taskActionCreator";
 import { shortStr } from "../../Helpers/utils";
@@ -85,18 +85,27 @@ const dateOptions = [
   },
 ];
 
-const Search = (props) => {
+const Search = ({ filterSuccess, getTasks, disabled }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const inputRef = useRef();
+  const filterRef = useRef();
 
   useEffect(() => {
+    filterRef.current = filterSuccess;
+  });
+  const prevFilterSuccess = filterRef.current;
+
+  useEffect(() => {
+    if (!prevFilterSuccess && filterSuccess) {
+      handleClose();
+    }
     if (show) {
       inputRef.current.focus();
     }
-  }, [show]);
+  }, [show, prevFilterSuccess, filterSuccess]);
 
   const [search, setSearch] = useState("");
 
@@ -135,13 +144,12 @@ const Search = (props) => {
       }
     }
 
-    props.getTasks(filterTasks);
-    handleClose();
+    getTasks(filterTasks);
   };
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow} disabled={props.disabled}>
+      <Button variant="primary" onClick={handleShow} disabled={disabled}>
         Filter tasks
       </Button>
 
@@ -230,6 +238,12 @@ const Search = (props) => {
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    filterSuccess: state.toDoReduser.filterSuccess,
+  };
+};
+
 const mapDispatchToProps = {
   getTasks,
 };
@@ -238,4 +252,4 @@ Search.propTypes = {
   disabled: PropTypes.bool.isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(Search);
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

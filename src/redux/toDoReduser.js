@@ -12,6 +12,7 @@ const initState = {
   removeTasksSuccess: false,
   removeTaskSuccess: false,
   editTaskSuccess: false,
+  filterSuccess: false,
 };
 
 const toDoReduser = (state = initState, action) => {
@@ -20,6 +21,7 @@ const toDoReduser = (state = initState, action) => {
     loading: true,
     successMessage: null,
     error: null,
+    filterSuccess: false,
   };
 
   switch (action.type) {
@@ -64,6 +66,7 @@ const toDoReduser = (state = initState, action) => {
         ...state,
         loading: false,
         tasks: action.payload,
+        filterSuccess: true,
       };
     }
 

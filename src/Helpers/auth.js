@@ -15,13 +15,13 @@ export function removeJwt() {
 
 export function getJwt() {
   const token = localStorage.getItem("token");
+
   if (!token) {
     logout();
     return null;
   }
 
   const parsed = JSON.parse(token);
-
   const decoded = decode(parsed.jwt);
 
   if (decoded.exp - Date.now() / 1000 < 60) {
@@ -50,6 +50,7 @@ export function getJwt() {
 
 export function checkLoginStatus() {
   const token = localStorage.getItem("token");
+
   if (!token) {
     return false;
   }

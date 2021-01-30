@@ -1,4 +1,5 @@
 import React from "react";
+import classes from "./TaskPage.module.css";
 import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,7 +8,6 @@ import {
   faHistory,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
-import classes from "./TaskPage.module.css";
 import EditTaskModal from "../ToDo/EditTaskModal";
 import { connect } from "react-redux";
 import {
@@ -62,6 +62,8 @@ class TaskPage extends React.PureComponent {
                 <span> LAST UPDATE: {formatDate(task.updated_at)}</span>
                 <br />
                 <span> DEADLINE: {formatDate(task.date)}</span>
+                <br />
+                <span> Status: {task.status}</span>
               </div>
               <div className={classes.taskButtons}>
                 {task.status === "active" ? (

@@ -1,6 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import classes from "./Nav.module.css";
+import { NavLink } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import { logout } from "../../redux/authActionCreator";
@@ -24,7 +24,7 @@ const Nav = ({ isAuthenticated, logout }) => {
           <>
             <li>
               <NavLink to="/" exact activeClassName={classes.activeLink}>
-                Tasks
+                Home
               </NavLink>
             </li>
             <li>

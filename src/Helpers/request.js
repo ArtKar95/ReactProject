@@ -4,9 +4,11 @@ const defaultError = { message: "Something wrong!" };
 
 export async function request(url, method = "GET", body) {
   const jwt = await getJwt();
+
   if (!jwt) {
     return Promise.reject(defaultError);
   }
+
   const config = {
     method: method,
     headers: {
@@ -14,6 +16,7 @@ export async function request(url, method = "GET", body) {
       Authorization: `Bearer ${jwt}`,
     },
   };
+
   if (body) {
     config.body = JSON.stringify(body);
   }
@@ -36,6 +39,7 @@ export async function requestWithoutJwt(url, method = "GET", body) {
       "Content-Type": "application/json",
     },
   };
+
   if (body) {
     config.body = JSON.stringify(body);
   }

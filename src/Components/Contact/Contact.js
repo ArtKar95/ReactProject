@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classes from "./Contact.module.css";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import { sendMessage } from "../../redux/authActionCreator";
 
-const Contact = (props) => {
+const Contact = ({ sendMessage, sendMessageSuccess }) => {
   const [values, setValues] = useState({
     name: "",
     email: "",
     message: "",
   });
+
+  useEffect(() => {
+    if (sendMessageSuccess) {
+      setValues({
+        name: "",
+        email: "",
+        message: "",
+      });
+    }
+  }, [sendMessageSuccess]);
 
   const [errors, setErrors] = useState({
     name: null,
@@ -52,12 +62,7 @@ const Contact = (props) => {
     });
 
     if (name.trim() && valid && message.trim()) {
-      props.sendMessage(values);
-      setValues({
-        name: "",
-        email: "",
-        message: "",
-      });
+      sendMessage(values);
     }
   };
 
@@ -114,7 +119,7 @@ const Contact = (props) => {
                     className="px-5 mb-2"
                   >
                     Send
-                  </Button>{" "}
+                  </Button>
                 </Form.Group>
               </Form>
             </div>
@@ -125,8 +130,14 @@ const Contact = (props) => {
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    sendMessageSuccess: state.authReduser.sendMessageSuccess,
+  };
+};
+
 const mapDispatchToProps = {
   sendMessage,
 };
 
-export default connect(null, mapDispatchToProps)(Contact);
+export default connect(mapStateToProps, mapDispatchToProps)(Contact);
